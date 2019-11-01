@@ -198,6 +198,9 @@ function clearFormFields() {
 	$('[name="Comments"]').val('')
 }
 
+function getLengthOfParkering(ap){
+	console.log(ap.getLatLngs())
+}
 function jsSubmitForm(e) {
 	/*if ($(e).find("button").text() == 'Skicka') {
 		$(e).append("Skickat. Tack för din synpunkt!")
@@ -207,8 +210,10 @@ function jsSubmitForm(e) {
 	navigator.geolocation.getCurrentPosition(function(position) {
 		es += '&SenderLocation='
 		es += position.coords.latitude + ',' + position.coords.longitude
-		es += '&featureMidpoint='
+		es += '&FeatureMidpoint='
 		es += aktivParkering.getBounds().getCenter().lat + ',' + aktivParkering.getBounds().getCenter().lng
+		es += '&FeatureLength='
+		es += getLengthOfParkering(aktivParkering)
 		console.log(es)
 		$.post($(e).attr('js_action'), es, function(response) {
 			// do something here on success
