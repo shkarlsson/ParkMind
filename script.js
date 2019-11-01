@@ -200,6 +200,9 @@ function clearFormFields() {
 
 function getLengthOfParkering(ap){
 	console.log(ap.getLatLngs())
+	apArr = ap.getLatLngs()
+	return apArr[0].distandeTo(apArr[apArr.length-1])
+	//latLng1.distanceTo(latLng2): 
 }
 function jsSubmitForm(e) {
 	/*if ($(e).find("button").text() == 'Skicka') {
