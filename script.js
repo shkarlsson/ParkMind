@@ -199,7 +199,7 @@ function clearFormFields() {
 }
 
 function getLengthOfParkering(ap){
-	console.log(ap.getLatLng())
+	console.log(ap)
 	apArr = ap.getLatLng()
 	return apArr[0].distandeTo(apArr[apArr.length-1])
 	//latLng1.distanceTo(latLng2): 
