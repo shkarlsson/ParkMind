@@ -132,6 +132,7 @@
 
 		<script>
 		// Your web app's Firebase configuration
+		/*
 		var firebaseConfig = {
 			apiKey: "AIzaSyBdl5yxJLCOozXX7a_SLgRIHnRvw0HmAnA",
 			authDomain: "api-project-699655863555.firebaseapp.com",
@@ -144,7 +145,17 @@
 		};
 		// Initialize Firebase
 		firebase.initializeApp(firebaseConfig);
-		firebase.analytics();
+		firebase.analytics();*/
+
+		var config = {
+			apiKey: "AIzaSyBdl5yxJLCOozXX7a_SLgRIHnRvw0HmAnA",
+			authDomain: "api-project-699655863555.firebaseapp.com",
+			databaseURL: "https://api-project-699655863555.firebaseio.com",
+			storageBucket: "api-project-699655863555.appspot.com"
+		};
+		firebase.initializeApp(config);
+
+		// Get a reference to the database service
 		var database = firebase.database();
 		console.log(database)
 		</script>
