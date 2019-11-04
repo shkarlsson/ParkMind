@@ -116,7 +116,6 @@ $(document).keyup(function(e) {
 function onLocationFound(e) {
 	//L.marker(e.latlng).addTo(map)
 	//	.bindPopup("You are within " + radius + " meters from this point").openPopup();
-	console.log(e)
 	e.latlng = [e.coords.latitude, e.coords.longitude];
 
 	if (currentLocation.dot) {
@@ -200,7 +199,7 @@ function clearFormFields() {
 
 function getLengthOfParkering(ap){
 	console.log(ap)
-	apArr = ap.getLatLng()
+	apArr = ap.latLngs()
 	return apArr[0].distandeTo(apArr[apArr.length-1])
 	//latLng1.distanceTo(latLng2): 
 }
