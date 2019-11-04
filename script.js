@@ -198,8 +198,8 @@ function clearFormFields() {
 }
 
 function getLengthOfParkering(ap){
-	console.log(ap)
-	apArr = ap.latLngs()
+	var key = Object.keys(ap._layers)[0]
+	var apArr = ap._layers[key].getLatLngs()
 	return apArr[0].distandeTo(apArr[apArr.length-1])
 	//latLng1.distanceTo(latLng2): 
 }
@@ -330,9 +330,6 @@ function onEachFeature(feature, layer) {
 			$('[name="FeatureId"]').val(feature.properties.FID)
 			$('.form-control').attr('disabled', false)
 			$('#bottom-floater').show()
-				//$('#submit-button').attr('disabled', false)
-				//$('#bottom-floater').removeClass('invisible')
-				//map.panTo([feature.geometry.coordinates[0][1], feature.geometry.coordinates[0][0]])
 
 			aktivParkering = L.geoJson(e.sourceTarget.feature, {
 				//onEachFeature: onEachFeature,
