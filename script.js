@@ -214,8 +214,8 @@ function jsSubmitForm(e) {
 		es += position.coords.latitude + ',' + position.coords.longitude
 		es += '&FeatureMidpoint='
 		es += aktivParkering.getBounds().getCenter().lat + ',' + aktivParkering.getBounds().getCenter().lng
-		//es += '&FeatureLength='
-		//es += getLengthOfParkering(aktivParkering)
+		es += '&FeatureLength='
+		es += getLengthOfParkering(aktivParkering)
 		console.log(es)
 		$.post($(e).attr('js_action'), es, function(response) {
 			// do something here on success
