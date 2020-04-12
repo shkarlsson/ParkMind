@@ -197,12 +197,17 @@ function clearFormFields() {
 	$('[name="Comments"]').val('')
 }
 
-function getLengthOfParkering(ap){
-	var key = Object.keys(ap._layers)[0]
-	var apArr = ap._layers[key].getLatLngs()
-	return apArr[0].distanceTo(apArr[apArr.length-1])
-	//latLng1.distanceTo(latLng2): 
+function getLengthOfParkering(polyline){
+	let length = 0
+	polyline.getLatLngs().forEach(function (latLng) {
+		if (previousPoint) {
+			length += previousPoint.distanceTo(latLng)
+		}
+		previousPoint = latLng;
+	});
+	return Math.round(length)
 }
+
 function jsSubmitForm(e) {
 	var es = $(e).serialize()
 
@@ -211,8 +216,8 @@ function jsSubmitForm(e) {
 		es += position.coords.latitude + ',' + position.coords.longitude
 		es += '&FeatureMidpoint='
 		es += aktivParkering.getBounds().getCenter().lat + ',' + aktivParkering.getBounds().getCenter().lng
-		//es += '&FeatureLength='
-		//es += getLengthOfParkering(aktivParkering)
+		es += '&FeatureLength='
+		es += getLengthOfParkering(aktivParkering)
 		console.log('The variable "es" to be json-ified and submitted is a ' + typeof es + ' and has the following value:')
 		console.log(es)
 		$.post($(e).attr('js_action'), es, function(response) {
