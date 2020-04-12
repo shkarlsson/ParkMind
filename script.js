@@ -15,9 +15,8 @@ function getDistanceFromLatLon(lat1, lon1, lat2, lon2) {
 	var a = 0.5 - c((lat2 - lat1) * p)/2 + 
 			  c(lat1 * p) * c(lat2 * p) * 
 			  (1 - c((lon2 - lon1) * p))/2;
-	return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
- }
-
+	return 12742000 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
+}
 
 var OpenStreetMap_BlackAndWhite = L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
 	maxZoom: 18,
@@ -60,7 +59,6 @@ var map = L.map('map', {
 	zoomControl: false,
 })
 
-
 var goToPositionButton = L.Control.extend({
 	options: {
 		position: 'topright'
@@ -75,7 +73,6 @@ var goToPositionButton = L.Control.extend({
 		return container;
 	}
 });
-
 
 map.addControl(new goToPositionButton());
 
@@ -93,7 +90,6 @@ $(document).ready(function() {
 		map.panTo(currentLocation.dot._latlng)
 	});
 });
-
 
 $(document).keyup(function(e) {
 	if (e.key === "Escape") { // escape key maps to keycode `27`
@@ -233,7 +229,6 @@ function jsSubmitForm(e) {
 	return false;
 }
 
-
 function panMapToPosition(position) {
 	onLocationFound(position)
 }
@@ -344,7 +339,6 @@ function onEachFeature(feature, layer) {
 	});
 }
 
-
 var promiseOfGeojsonData = new Promise(function(resolve, reject) {
 	$.getJSON("js/StockholmGatuP190611.json", function(data) {
 		resolve(data)
@@ -393,7 +387,6 @@ function loadParkingLines() {
 		}
 	}).addTo(map)
 }
-
 
 Promise.all([promiseOfGeojsonData]).then(function(values) {
 	globalValues = values[0]
