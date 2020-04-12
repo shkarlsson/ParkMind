@@ -209,7 +209,7 @@ function clearFormFields() {
 
 function getLengthOfParkering(ap){
 	console.log(ap)
-	var coords = ap.coordinates;
+	var coords = ap._layers[Object.keys(ap._layers)[0]]._latlngs;
 	var length = 0
 	for (let i = 0; i < coords.length; i++) {
 		if (i > 0) {
