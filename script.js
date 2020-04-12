@@ -9,6 +9,20 @@ var shownFIDs = []
 var currentLocation = {}
 var minZoomToLoadFeatures = 16
 
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+	var R = 6371000; // Radius of the earth in m
+	var dLat = deg2rad(lat2 - lat1); // deg2rad below
+	var dLon = deg2rad(lon2 - lon1);
+	var a =
+		Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+		Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+		Math.sin(dLon / 2) * Math.sin(dLon / 2);
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+	var d = R * c; // Distance in m
+	return d;
+}
+
+
 var OpenStreetMap_BlackAndWhite = L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
 	maxZoom: 18,
 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -50,18 +64,6 @@ var map = L.map('map', {
 	zoomControl: false,
 })
 
-/*map.pm.addControls({
-	position: 'topright',
-	drawMarker: false,
-	drawCircle: false,
-	drawRectangle: false,
-	drawPolygon: false,
-	drawCircle: false,
-	editMode: false,
-	dragMode: false,
-	cutPolygon: false,
-	removalMode: false,
-});*/
 
 var goToPositionButton = L.Control.extend({
 	options: {
@@ -197,16 +199,17 @@ function clearFormFields() {
 	$('[name="Comments"]').val('')
 }
 
-function getLengthOfParkering(polyline){
-	//polyline = L.polyline(coordsToLatLngs(ap))
+function getLengthOfParkering(ap){
+	let coords = ap.coordinates;
 	let length = 0
-	polyline.coordsToLatLngs().forEach(function (latLng) {
-		if (previousPoint) {
-			length += previousPoint.distanceTo(latLng)
+	for (let i = 0; i < feature.coordinates.length; i++) {
+		if (i > 0) {
+			length += getDistanceFromLatLonInKm(previousPoint[i][1],previousPoint[i][0]coords[i][1],coords[i][0])
 		}
 		previousPoint = latLng;
-	});
+    }
 	return Math.round(length)
+
 }
 
 function jsSubmitForm(e) {
@@ -322,10 +325,6 @@ map.on('moveend', function() {
 });
 
 function onEachFeature(feature, layer) {
-	/*layer.bindPopup(buildPopupContent(feature)).on('popupopen', function(popup) {
-		layer.getPopup().setContent(buildPopupContent(feature))
-
-	});*/
 	layer.on({
 		click: function(e) {
 			if (aktivParkering) {
@@ -421,11 +420,9 @@ Promise.all([promiseOfGeojsonData]).then(function(values) {
 		var div = L.DomUtil.create('div', 'info legend');
 		labels = ['<strong>Probability of availability</strong>']
 		for (var i in usedColors) {
-
 			div.innerHTML +=
 				labels.push(
 					' <svg width="30" height="14"><rect x="2" y="5" width="26" height="8" rx="2" ry="2" style="fill:none;stroke-width:2;stroke:' + usedColors[i] + '" /></svg>  ' + i);
-
 		}
 		div.innerHTML = labels.join('<br>');
 		return div;
