@@ -9,7 +9,7 @@ var shownFIDs = []
 var currentLocation = {}
 var minZoomToLoadFeatures = 16
 
-function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+/*function getDistanceFromLatLon(lat1, lon1, lat2, lon2) {
 	var R = 6371000; // Radius of the earth in m
 	var dLat = deg2rad(lat2 - lat1); // deg2rad below
 	var dLon = deg2rad(lon2 - lon1);
@@ -20,7 +20,16 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
 	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 	var d = R * c; // Distance in m
 	return d;
-}
+}*/
+//Below is supposed to be twice as fast as above...
+function getDistanceFromLatLon(lat1, lon1, lat2, lon2) {
+	var p = 0.017453292519943295;    // Math.PI / 180
+	var c = Math.cos;
+	var a = 0.5 - c((lat2 - lat1) * p)/2 + 
+			  c(lat1 * p) * c(lat2 * p) * 
+			  (1 - c((lon2 - lon1) * p))/2;
+	return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
+ }
 
 
 var OpenStreetMap_BlackAndWhite = L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
@@ -79,7 +88,6 @@ var goToPositionButton = L.Control.extend({
 		return container;
 	}
 });
-
 
 
 map.addControl(new goToPositionButton());
@@ -204,12 +212,11 @@ function getLengthOfParkering(ap){
 	let length = 0
 	for (let i = 0; i < feature.coordinates.length; i++) {
 		if (i > 0) {
-			length += getDistanceFromLatLonInKm(previousPoint[1],previousPoint[0]coords[i][1],coords[i][0])
+			length += getDistanceFromLatLon(previousPoint[1],previousPoint[0]coords[i][1],coords[i][0])
 		}
 		previousPoint = coords[i];
-    }
+   }
 	return Math.round(length)
-
 }
 
 function jsSubmitForm(e) {
