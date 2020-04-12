@@ -208,8 +208,8 @@ function clearFormFields() {
 }
 
 function getLengthOfParkering(ap){
-	let coords = ap.coordinates;
-	let length = 0
+	var coords = ap.coordinates;
+	var length = 0
 	for (let i = 0; i < coords.length; i++) {
 		if (i > 0) {
 			length += getDistanceFromLatLon(previousPoint[1],previousPoint[0],coords[i][1],coords[i][0])
