@@ -204,9 +204,6 @@ function getLengthOfParkering(ap){
 	//latLng1.distanceTo(latLng2): 
 }
 function jsSubmitForm(e) {
-	/*if ($(e).find("button").text() == 'Skicka') {
-		$(e).append("Skickat. Tack för din synpunkt!")
-	}*/
 	var es = $(e).serialize()
 
 	navigator.geolocation.getCurrentPosition(function(position) {
@@ -216,6 +213,7 @@ function jsSubmitForm(e) {
 		es += aktivParkering.getBounds().getCenter().lat + ',' + aktivParkering.getBounds().getCenter().lng
 		//es += '&FeatureLength='
 		//es += getLengthOfParkering(aktivParkering)
+		console.log('The variable "es" to be json-ified and submitted is a ' + typeof es + ' and has the following value:')
 		console.log(es)
 		$.post($(e).attr('js_action'), es, function(response) {
 			// do something here on success
