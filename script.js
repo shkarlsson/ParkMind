@@ -204,9 +204,9 @@ function getLengthOfParkering(ap){
 	let length = 0
 	for (let i = 0; i < feature.coordinates.length; i++) {
 		if (i > 0) {
-			length += getDistanceFromLatLonInKm(previousPoint[i][1],previousPoint[i][0]coords[i][1],coords[i][0])
+			length += getDistanceFromLatLonInKm(previousPoint[1],previousPoint[0]coords[i][1],coords[i][0])
 		}
-		previousPoint = latLng;
+		previousPoint = coords[i];
     }
 	return Math.round(length)
 
