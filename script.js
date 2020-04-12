@@ -197,7 +197,8 @@ function clearFormFields() {
 	$('[name="Comments"]').val('')
 }
 
-function getLengthOfParkering(polyline){
+function getLengthOfParkering(ap){
+	polyline = L.polyline(coordsToLatLngs(ap))
 	let length = 0
 	polyline.getLatLngs().forEach(function (latLng) {
 		if (previousPoint) {
