@@ -216,7 +216,8 @@ function getLengthOfParkering(ap){
 			length += getDistanceFromLatLon(previousPoint[1],previousPoint[0],coords[i][1],coords[i][0])
 		}
 		previousPoint = coords[i];
-   }
+	}
+	console.log(length)
 	return Math.round(length)
 }
 
