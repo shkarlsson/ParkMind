@@ -388,17 +388,17 @@ var nowX = new Promise(function(resolve, reject) {
 		console.log(data)
 		var resolver = {}
 		for (var i in data['field']) {
-			if (Array.isArray(data['row'][i])) {
-				data['row'][i] = data['row'][i][0]
+			if (Array.isArray(data['field'][i])) {
+				data['field'][i] = data['field'][i][0]
 			}
-			if (!isNaN(parseFloat(data['row'][i]))) {
-				data['row'][i] = parseFloat(data['row'][i])
+			if (!isNaN(parseFloat(data['field'][i]))) {
+				data['field'][i] = parseFloat(data['field'][i])
 
 			}
-			if (data['row'][i] == null) {
-				data['row'][i] = 0 //'undefined' //data['row'][i]  //Fixa detta så det blir rätt.
+			if (data['field'][i] == null) {
+				data['field'][i] = 0 //'undefined' //data['field'][i]  //Fixa detta så det blir rätt.
 			}
-			resolver[data['field'][i]] = data['row'][i]
+			resolver[data['field'][i]] = data['field'][i]
 		}
 		resolve(resolver)
 			//resolve(data)
