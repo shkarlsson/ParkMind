@@ -379,6 +379,8 @@ function loadParkingLines() {
 		}
 	}).addTo(map)
 }
+
+var serial = 'SenderLocation=59.32057711341785,17.988721215030026'
 var nowX = new Promise(function(resolve, reject) {
 	$.get($("#gform").attr('js_action'), serial, function(response) {
 		//console.log(response)
@@ -445,7 +447,7 @@ Promise.all([nowX,promiseOfGeojsonData,model,scaler,superflousAttributes,weather
 	print(scaler)
 	print(superflousAttributes)
 	print(weather)
-	
+
 	loadParkingLines()
 
 	var legend = L.control({
