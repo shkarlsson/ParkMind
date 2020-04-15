@@ -339,16 +339,8 @@ function onEachFeature(feature, layer) {
 	});
 }
 
-var promiseOfGeojsonData = new Promise(function(resolve, reject) {
-	$.getJSON("js/allaParkeringarSthlmStad.geojson", function(data) {
-		resolve(data)
-	});
-});
-
 function recolorThisFeature(fid) {
 	parkeringar.eachLayer(function(layer) {
-		//console.log(layer.feature.properties.FID)
-
 		if (layer.feature.properties.FID == fid) {
 			layer.setStyle({
 				color: 'red'
@@ -387,11 +379,74 @@ function loadParkingLines() {
 		}
 	}).addTo(map)
 }
+var nowX = new Promise(function(resolve, reject) {
+	$.get($("#gform").attr('js_action'), serial, function(response) {
+		//console.log(response)
+		var data = JSON.parse(response)
+		var resolver = {}
+		for (var i in data['field']) {
+			if (Array.isArray(data['row'][i])) {
+				data['row'][i] = data['row'][i][0]
+			}
+			if (!isNaN(parseFloat(data['row'][i]))) {
+				data['row'][i] = parseFloat(data['row'][i])
 
-Promise.all([promiseOfGeojsonData]).then(function(values) {
-	globalValues = values[0]
+			}
+			if (data['row'][i] == null) {
+				data['row'][i] = 0 //'undefined' //data['row'][i]  //Fixa detta så det blir rätt.
+			}
+			resolver[data['field'][i]] = data['row'][i]
+		}
+		resolve(resolver)
+			//resolve(data)
+	}, 'json');
+});
+
+var promiseOfGeojsonData = new Promise(function(resolve, reject) {
+	$.getJSON("js/allaParkeringarSthlmStad.geojson", function(data) {
+		resolve(data)
+	});
+});
+
+var model = new Promise(function(resolve, reject) {
+	const data = tf.loadLayersModel('../tfjs/model.json');
+	resolve(data)
+});
+
+var scaler = new Promise(function(resolve, reject) {
+	$.getJSON("../tfjs/scaler.json", function(data) {
+		resolve(data)
+	});
+});
+
+var superflousAttributes = new Promise(function(resolve, reject) {
+	$.getJSON("../tfjs/superflousAttributes.json", function(data) {
+		resolve(data)
+	});
+});
+
+var weather = new Promise(function(resolve, reject) {
+	$.getJSON("../tfjs/scaler.json", function(data) {
+		resolve(data)
+	});
+});
+
+Promise.all([nowX,promiseOfGeojsonData,model,scaler,superflousAttributes,weather]).then(function(values) {
+	nowX = values[0]
+	globalValues = values[1]
+	model = values[2]
+	scaler = values[3]
+	superflousAttributes = values[4]
+	weather = values[5]
+
+	print(nowX)
+	print(globalValues)
+	print(model)
+	print(scaler)
+	print(superflousAttributes)
+	print(weather)
+	
 	loadParkingLines()
-
 
 	var legend = L.control({
 		position: 'topleft',
@@ -423,3 +478,5 @@ Promise.all([promiseOfGeojsonData]).then(function(values) {
 //Fixa legend igen
 //Fixa totaler i legend
 //Föreslå ny plats-funktion
+
+
