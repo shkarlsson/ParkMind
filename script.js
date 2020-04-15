@@ -340,7 +340,7 @@ function onEachFeature(feature, layer) {
 }
 
 var promiseOfGeojsonData = new Promise(function(resolve, reject) {
-	$.getJSON("js/StockholmGatuP190611.json", function(data) {
+	$.getJSON("js/allaParkeringarSthlmStad.geojson", function(data) {
 		resolve(data)
 	});
 });
