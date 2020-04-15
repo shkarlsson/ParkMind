@@ -385,6 +385,7 @@ var nowX = new Promise(function(resolve, reject) {
 	$.get($("#gform").attr('js_action'), serial, function(response) {
 		//console.log(response)
 		var data = JSON.parse(response)
+		console.log(data)
 		var resolver = {}
 		for (var i in data['field']) {
 			if (Array.isArray(data['row'][i])) {
@@ -441,12 +442,12 @@ Promise.all([nowX,promiseOfGeojsonData,model,scaler,superflousAttributes,weather
 	superflousAttributes = values[4]
 	weather = values[5]
 
-	print(nowX)
-	print(globalValues)
-	print(model)
-	print(scaler)
-	print(superflousAttributes)
-	print(weather)
+	console.log(nowX)
+	console.log(globalValues)
+	console.log(model)
+	console.log(scaler)
+	console.log(superflousAttributes)
+	console.log(weather)
 
 	loadParkingLines()
 
