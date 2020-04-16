@@ -412,8 +412,8 @@ var promiseOfGeojsonData = new Promise(function(resolve, reject) {
 });
 
 var model = new Promise(function(resolve, reject) {
-	const data = tf.loadLayersModel('../tfjs/model.json');
-	resolve(data)
+	//const data = tf.loadLayersModel('../tfjs/model.json');
+	resolve('data instead of tf load layers model')
 });
 
 var scaler = new Promise(function(resolve, reject) {
