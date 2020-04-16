@@ -428,26 +428,18 @@ var superflousAttributes = new Promise(function(resolve, reject) {
 	});
 });
 
-var weather = new Promise(function(resolve, reject) {
-	$.getJSON("../tfjs/scaler.json", function(data) {
-		resolve(data)
-	});
-});
-
-Promise.all([nowX,promiseOfGeojsonData,model,scaler,superflousAttributes,weather]).then(function(values) {
+Promise.all([nowX,promiseOfGeojsonData,model,scaler,superflousAttributes]).then(function(values) {
 	nowX = values[0]
 	globalValues = values[1]
 	model = values[2]
 	scaler = values[3]
 	superflousAttributes = values[4]
-	weather = values[5]
 
 	console.log(nowX)
 	console.log(globalValues)
 	console.log(model)
 	console.log(scaler)
 	console.log(superflousAttributes)
-	console.log(weather)
 
 	loadParkingLines()
 
