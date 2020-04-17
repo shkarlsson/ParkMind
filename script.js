@@ -351,8 +351,8 @@ function recolorThisFeature(fid) {
 
 function getGeojsonCenter(f){
 	let xMin = 10^10
-	let xMax = -10^10
 	let yMin = 10^10
+	let xMax = -10^10
 	let yMax = -10^10
 	for (c in f.geometry.coordinates){
 		cc = f.geometry.coordinates[c]
@@ -369,7 +369,7 @@ function getGeojsonCenter(f){
 			yMin = cc[1]
 		}
 	}
-	return {'x':(xMax+xMin)/2,'y':(yMax+yMin)/2}
+	return {'x':Math.mean(xMax,xMin),'y':Math.mean(yMax,yMin)}
 }
 
 function determineCororThroughML(f){
@@ -383,7 +383,6 @@ function determineCororThroughML(f){
 			X.push(nowX[x])
 		}
 		else if (x in referefenceMidpoints){
-			console.log(referefenceMidpoints[x])
 			la = String(referefenceMidpoints[x]).split(',')[0]
 			lo = String(referefenceMidpoints[x]).split(',')[1]
 			console.log(c.y + ',' + c.x + ' - ' + la + ',' + lo)
