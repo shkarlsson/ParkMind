@@ -366,7 +366,7 @@ function getGeojsonCenter(f){
 			yMax = cc[1]
 		}
 		if (cc[1] < yMin){
-			yMax = cc[1]
+			yMin = cc[1]
 		}
 	}
 	return {'x':(xMax+xMin)/2,'y':(yMax+yMin)/2}
