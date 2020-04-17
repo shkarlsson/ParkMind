@@ -356,14 +356,18 @@ function getGeojsonCenter(f){
 	let yMax = -10^10
 	for (c in f.geometry.coordinates){
 		cc = f.geometry.coordinates[c]
-		if cc[0] > xMax:
+		if (cc[0] > xMax){
 			xMax = cc[0]
-		if cc[0] < xMin:
+		}
+		if (cc[0] < xMin){
 			xMin = cc[0]
-		if cc[1] > yMax:
+		}
+		if (cc[1] > yMax){
 			yMax = cc[1]
-		if cc[1] < yMin:
+		}
+		if (cc[1] < yMin){
 			yMax = cc[1]
+		}
 	}
 	return {'x':(xMax+xMin)/2,'y':(yMax+yMin)/2}
 }
@@ -379,6 +383,7 @@ function determineCororThroughML(f){
 		else if (x in referefenceMidpoints){
 			la = referefenceMidpoints[x].split(',')[0]
 			lo = referefenceMidpoints[x].split(',')[1]
+			console.log(c.y + ',' + c.x + ' - ' + la + ',' + lo)
 			X.push(getDistanceFromLatLon(c.y,c.x,la,lo))
 		}
 		else{
