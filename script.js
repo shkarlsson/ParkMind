@@ -351,7 +351,7 @@ function recolorThisFeature(fid) {
 
 function determineCororThroughML(f){
 	let X = []
-	c = f.getBounds().getCenter()
+	c = f.getCenter()
 	for (var x in scaler['name']){
 		if (x in nowX){
 			X.push(nowX[x])
