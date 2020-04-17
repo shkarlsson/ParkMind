@@ -378,10 +378,7 @@ function determineCororThroughML(f){
 	var la, lo
 	c = getGeojsonCenter(f)
 	for (var i in scaler['name']){
-		console.log(scaler['name'][i])
-		console.log(Object.keys(scaler['name'][i]))
-		console.log(Object.keys(scaler['name'][i])[0])
-		x = Object.keys(scaler['name'][i])[0]
+		x = scaler['name'][i]
 		if (x in nowX){
 			X.push(nowX[x])
 		}
