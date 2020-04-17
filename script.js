@@ -349,10 +349,11 @@ function recolorThisFeature(fid) {
 	})
 }
 
-function determineCororThroughML(f){
+function determineCororThroughML(f,l){
 	console.log(f)
+	console.log(l)
 	let X = []
-	c = f.getBounds().getCenter()
+	c = l.getBounds().getCenter()
 	for (var x in scaler['name']){
 		if (x in nowX){
 			X.push(nowX[x])
@@ -384,10 +385,10 @@ function loadParkingLines() {
 		filter: function(feature, layer) {
 			return withinViewAndNotInMap(feature)
 		},
-		style: function(feature) {
+		style: function(feature,layer) {
 			return {
 				weight: 8,
-				color: determineCororThroughML(feature),
+				color: determineCororThroughML(feature,layer),
 				lineCap: 'butt',
 				opacity: 0.7,
 			}
