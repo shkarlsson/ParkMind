@@ -369,7 +369,7 @@ function getGeojsonCenter(f){
 			yMin = cc[1]
 		}
 	}
-	return {'x':Math.mean(xMax,xMin),'y':Math.mean(yMax,yMin)}
+	return {'x':(xMax+xMin)/2,'y':(yMax+yMin)/2}
 }
 
 function determineCororThroughML(f){
