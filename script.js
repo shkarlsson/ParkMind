@@ -382,8 +382,8 @@ function determineCororThroughML(f){
 		}
 		else if (x in referefenceMidpoints){
 			console.log(referefenceMidpoints[x])
-			la = referefenceMidpoints[x].split(',')[0]
-			lo = referefenceMidpoints[x].split(',')[1]
+			la = String(referefenceMidpoints[x]).split(',')[0]
+			lo = String(referefenceMidpoints[x]).split(',')[1]
 			console.log(c.y + ',' + c.x + ' - ' + la + ',' + lo)
 			X.push(getDistanceFromLatLon(c.y,c.x,la,lo))
 		}
