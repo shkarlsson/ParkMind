@@ -369,7 +369,7 @@ function getGeojsonCenter(f){
 			yMin = cc[1]
 		}
 	}
-	return {'x':((xMax+xMin)/2),'y':((yMax+yMin)/2)}
+	return {'x':(xMax+xMin),'y':(yMax+yMin)} //For some really weird reason, I shouldn't divide with 2 to get the average between min an max. I don't understand how, but this works.
 }
 
 function determineCororThroughML(f){
