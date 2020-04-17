@@ -351,13 +351,25 @@ function recolorThisFeature(fid) {
 
 function determineCororThroughML(f){
 	let X = []
-	for (var x in scaler){
-		X.push(nowX[x])
+	c = f.getBounds().getCenter()
+	for (var x in scaler['name']){
+		if (x in nowX){
+			X.push(nowX[x])
+		}
+		else if (x in referefenceMidpoints){
+			la = referefenceMidpoints[x].split(',')[0]
+			lo = referefenceMidpoints[x].split(',')[1]
+			X.push(getDistanceFromLatLon(c.lat,c.lng,la,lo))
+		}
+		else{
+			console.log('x (' + x + ') not anywhere')
+		}
 	}
 	
 	console.log(X)
-
+	
 	for (var i in referefenceMidpoints){
+
 		
 	}
 
