@@ -390,7 +390,7 @@ function loadParkingLines() {
 	}).addTo(map)
 }
 
-var serial = 'ParkedCars=312312&FreeSpots=&TotalSpots=&IllegalParkings=&Comments=&FeatureId=30228714&SenderLocation=59.32041214046096,17.988411617590103&FeatureMidpoint=59.3202055,17.987212&FeatureLength=39' //Placeholder
+var serial = 'FeatureId=30228714&SenderLocation=59.32041214046096,17.988411617590103&FeatureMidpoint=59.3202055,17.987212&FeatureLength=39' //Placeholder
 var nowX = new Promise(function(resolve, reject) {
 	$.get($("#gform").attr('js_action'), serial, function(response) {
 		//console.log(response)
