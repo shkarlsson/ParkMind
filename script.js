@@ -350,9 +350,15 @@ function recolorThisFeature(fid) {
 }
 
 function determineCororThroughML(f){
-	let xAdd = []
-	for (var rmp in referefenceMidpoints){
+	let X = []
+	for (var x in scaler){
+		X.push(nowX[x])
+	}
+	
+	console.log(X)
 
+	for (var i in referefenceMidpoints){
+		
 	}
 
 	console.log(f)
