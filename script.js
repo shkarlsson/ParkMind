@@ -351,7 +351,7 @@ function recolorThisFeature(fid) {
 
 function determineCororThroughML(f){
 	console.log(f)
-	return colors.red99
+	return colors.blue100
 }
 
 function loadParkingLines() {
@@ -411,24 +411,24 @@ var nowX = new Promise(function(resolve, reject) {
 });
 
 var promiseOfGeojsonData = new Promise(function(resolve, reject) {
-	$.getJSON("js/allaParkeringarSthlmStad.geojson", function(data) {
+	$.getJSON("../data/allaParkeringarSthlmStad.geojson", function(data) {
 		resolve(data)
 	});
 });
 
 var model = new Promise(function(resolve, reject) {
-	const data = tf.loadLayersModel('../tfjs/model.json');
+	const data = tf.loadLayersModel('../data/model.json');
 	resolve(data)
 });
 
 var scaler = new Promise(function(resolve, reject) {
-	$.getJSON("../tfjs/scaler.json", function(data) {
+	$.getJSON("../data/scaler.json", function(data) {
 		resolve(data)
 	});
 });
 
 var superflousAttributes = new Promise(function(resolve, reject) {
-	$.getJSON("../tfjs/superflousAttributes.json", function(data) {
+	$.getJSON("../data/superflousAttributes.json", function(data) {
 		resolve(data)
 	});
 });
