@@ -381,6 +381,7 @@ function determineCororThroughML(f){
 			X.push(nowX[x])
 		}
 		else if (x in referefenceMidpoints){
+			console.log(referefenceMidpoints[x])
 			la = referefenceMidpoints[x].split(',')[0]
 			lo = referefenceMidpoints[x].split(',')[1]
 			console.log(c.y + ',' + c.x + ' - ' + la + ',' + lo)
