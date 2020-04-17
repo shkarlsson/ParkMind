@@ -350,6 +350,7 @@ function recolorThisFeature(fid) {
 }
 
 function determineCororThroughML(f){
+	console.log(f)
 	return colors.red99
 }
 
@@ -359,7 +360,7 @@ function loadParkingLines() {
 		filter: function(feature, layer) {
 			return withinViewAndNotInMap(feature)
 		},
-		style: function(params) {
+		style: function(feature) {
 			return {
 				weight: 8,
 				color: determineCororThroughML(feature),
