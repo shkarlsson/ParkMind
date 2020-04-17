@@ -349,11 +349,29 @@ function recolorThisFeature(fid) {
 	})
 }
 
-function determineCororThroughML(f,l){
+function getGeojsonCenter(f){
+	let xMin = 10^10
+	let xMax = -10^10
+	let yMin = 10^10
+	let yMax = -10^10
+	for (c in f.geometry.coordinates){
+		cc = f.geometry.coordinates[c]
+		if cc[0] > xMax:
+			xMax = cc[0]
+		if cc[0] < xMin:
+			xMin = cc[0]
+		if cc[1] > yMax:
+			yMax = cc[1]
+		if cc[1] < yMin:
+			yMax = cc[1]
+	}
+	return {'x':(xMax+xMin)/2,'y':(yMax+yMin)/2}
+}
+
+function determineCororThroughML(f){
 	console.log(f)
-	console.log(l)
 	let X = []
-	c = l.getBounds().getCenter()
+	c = getGeojsonCenter(f)
 	for (var x in scaler['name']){
 		if (x in nowX){
 			X.push(nowX[x])
@@ -361,7 +379,7 @@ function determineCororThroughML(f,l){
 		else if (x in referefenceMidpoints){
 			la = referefenceMidpoints[x].split(',')[0]
 			lo = referefenceMidpoints[x].split(',')[1]
-			X.push(getDistanceFromLatLon(c.lat,c.lng,la,lo))
+			X.push(getDistanceFromLatLon(c.y,c.x,la,lo))
 		}
 		else{
 			console.log('x (' + x + ') not anywhere')
@@ -388,7 +406,7 @@ function loadParkingLines() {
 		style: function(feature,layer) {
 			return {
 				weight: 8,
-				color: determineCororThroughML(feature,layer),
+				color: determineCororThroughML(feature),
 				lineCap: 'butt',
 				opacity: 0.7,
 			}
