@@ -350,8 +350,9 @@ function recolorThisFeature(fid) {
 }
 
 function determineCororThroughML(f){
+	console.log(f)
 	let X = []
-	c = f.getCenter()
+	c = f.getBounds().getCenter()
 	for (var x in scaler['name']){
 		if (x in nowX){
 			X.push(nowX[x])
@@ -373,7 +374,7 @@ function determineCororThroughML(f){
 		
 	}
 
-	console.log(f)
+	
 	return colors.blue100
 }
 
