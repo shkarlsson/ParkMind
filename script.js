@@ -4,7 +4,7 @@ if (isIE) {
 	alert("Det verkar som att du använder Internet Explorer. Vissa funktioner på sajten kan därför fungera dåligt. Vänligen överväg att byta till en modern webbläsare, såsom Chrome eller Firefox.")
 }
 
-var globalValues, clickArea, parkeringar, aktivParkering
+var globalValues, clickArea, parkeringar, aktivParkering, referefenceMidpoints, scaler
 var shownFIDs = []
 var currentLocation = {}
 var minZoomToLoadFeatures = 16
@@ -350,6 +350,11 @@ function recolorThisFeature(fid) {
 }
 
 function determineCororThroughML(f){
+	let xAdd = []
+	for (var rmp in referefenceMidpoints){
+
+	}
+
 	console.log(f)
 	return colors.blue100
 }
@@ -385,7 +390,7 @@ function loadParkingLines() {
 	}).addTo(map)
 }
 
-var serial = 'SenderLocation=59.32057711341785,17.988721215030026'
+var serial = 'ParkedCars=312312&FreeSpots=&TotalSpots=&IllegalParkings=&Comments=&FeatureId=30228714&SenderLocation=59.32041214046096,17.988411617590103&FeatureMidpoint=59.3202055,17.987212&FeatureLength=39' //Placeholder
 var nowX = new Promise(function(resolve, reject) {
 	$.get($("#gform").attr('js_action'), serial, function(response) {
 		//console.log(response)
@@ -421,6 +426,12 @@ var model = new Promise(function(resolve, reject) {
 	resolve(data)
 });
 
+var referefenceMidpoints = new Promise(function(resolve, reject) {
+	$.getJSON("../data/referenceMidpoints.json", function(data) {
+		resolve(data)
+	});
+});
+
 var scaler = new Promise(function(resolve, reject) {
 	$.getJSON("../data/scaler.json", function(data) {
 		resolve(data)
@@ -433,16 +444,18 @@ var superflousAttributes = new Promise(function(resolve, reject) {
 	});
 });
 
-Promise.all([nowX,promiseOfGeojsonData,model,scaler,superflousAttributes]).then(function(values) {
+Promise.all([nowX,promiseOfGeojsonData,model,referefenceMidpoints,scaler,superflousAttributes]).then(function(values) {
 	nowX = values[0]
 	globalValues = values[1]
 	model = values[2]
-	scaler = values[3]
-	superflousAttributes = values[4]
+	referefenceMidpoints = values[3]
+	scaler = values[4]
+	superflousAttributes = values[5]
 
 	console.log(nowX)
 	console.log(globalValues)
 	console.log(model)
+	console.log(referefenceMidpoints)
 	console.log(scaler)
 	console.log(superflousAttributes)
 
