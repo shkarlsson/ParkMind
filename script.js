@@ -349,6 +349,10 @@ function recolorThisFeature(fid) {
 	})
 }
 
+function determineCororThroughML(f){
+	return colors.red99
+}
+
 function loadParkingLines() {
 	parkeringar = L.geoJson(globalValues, {
 		//onEachFeature: onEachFeature,
@@ -358,7 +362,7 @@ function loadParkingLines() {
 		style: function(params) {
 			return {
 				weight: 8,
-				color: colors.blue100,
+				color: determineCororThroughML(feature),
 				lineCap: 'butt',
 				opacity: 0.7,
 			}
