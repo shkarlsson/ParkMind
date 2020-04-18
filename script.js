@@ -416,12 +416,12 @@ function determineCororThroughML(f){
 	}
 
 	console.log(normalizedX)
-	//tf_x = tf.tensor(normalizedX)
-	//tf_x = tf_x.reshape([1, normalizedX.length])
-	
-	//const pred = model.predict(tf_x).dataSync()
+	tf_x = tf.tensor(normalizedX)
+	tf_x = tf_x.reshape([1, normalizedX.length])
 
-	//console.log(pred)
+	const pred = model.predict(tf_x).dataSync()
+
+	console.log(pred)
 
 	return colors.blue100
 }
