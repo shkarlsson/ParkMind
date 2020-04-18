@@ -390,8 +390,8 @@ function determineCororThroughML(f){
 			X.push(getDistanceFromLatLon(c.y,c.x,la,lo))
 		}
 		else if (x.substr(0, 4) == 'cat_') { //Making one-hots
-			var cat = x.substr(4, i.lastIndexOf('_') - 4)
-			var catVal = x.substr(i.lastIndexOf('_') + 1)
+			var cat = x.substr(4, x.lastIndexOf('_') - 4)
+			var catVal = x.substr(x.lastIndexOf('_') + 1)
 			console.log('Checking if nowX[' + cat + '] (' + nowX[cat] + ') == ' + catVal)
 			if (nowX[cat] == catVal) {
 				console.log('it was')
