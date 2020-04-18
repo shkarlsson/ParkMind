@@ -394,7 +394,7 @@ function determineCororThroughML(f){
 			var catVal = x.substr(i.lastIndexOf('_') + 1)
 			console.log('Checking if nowX[' + cat + '] (' + nowX[cat] + ') == ' + catVal)
 			if (nowX[cat] == catVal) {
-				//console.log('it was')
+				console.log('it was')
 				nowX[x] = 1
 			} else {
 				nowX[x] = 0
