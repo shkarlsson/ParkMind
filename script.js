@@ -410,15 +410,14 @@ function determineCororThroughML(f){
 	}
 	console.log(X)
 	//Normalizing
-	j = 0
-	var tensorArr = []
-	for (var i in ) {
-		tensorArr.push((nowX[i] - scaler.mean[i]) / scaler.scale[i]) //(normVals.max[i] - normVals.min[i])
+	var normalizedX = []
+	for (var i in X) {
+		normalizedX.push((nowX[i] - scaler.mean[i]) / scaler.scale[i]) //(normVals.max[i] - normVals.min[i])
 	}
 
-	console.log(tensorArr)
-	//tf_x = tf.tensor(tensorArr)
-	//tf_x = tf_x.reshape([1, tensorArr.length])
+	console.log(normalizedX)
+	//tf_x = tf.tensor(normalizedX)
+	//tf_x = tf_x.reshape([1, normalizedX.length])
 	
 	//const pred = model.predict(tf_x).dataSync()
 
