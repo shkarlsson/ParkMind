@@ -392,9 +392,9 @@ function determineCororThroughML(f){
 		else if (x.substr(0, 4) == 'cat_') { //Making one-hots
 			var cat = x.substr(4, x.lastIndexOf('_') - 4)
 			var catVal = x.substr(x.lastIndexOf('_') + 1)
-			console.log('Checking if nowX[' + cat + '] (' + nowX[cat] + ') == ' + catVal)
+			//console.log('Checking if nowX[' + cat + '] (' + nowX[cat] + ') == ' + catVal)
 			if (nowX[cat] == catVal) {
-				console.log('it was')
+				//console.log('it was')
 				nowX[x] = 1
 			} else {
 				nowX[x] = 0
@@ -405,12 +405,22 @@ function determineCororThroughML(f){
 			console.log('x (' + x + ') not anywhere')
 		}
 	}
-	
-	console.log(X)
-	
 	for (var i in referefenceMidpoints){
 		
 	}
+	console.log(X)
+	//Normalizing
+	j = 0
+	var tensorArr = []
+	for (var i in nowX) {
+		tensorArr.push((nowX[i] - scaler.mean[i]) / scaler.scale[i]) //(normVals.max[i] - normVals.min[i])
+	}
+	tf_x = tf.tensor(tensorArr)
+	tf_x = tf_x.reshape([1, tensorArr.length])
+	
+	const pred = model.predict(tf_x).dataSync()
+
+	console.log(pred)
 	return colors.blue100
 }
 
