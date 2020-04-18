@@ -412,7 +412,7 @@ function determineCororThroughML(f){
 	//Normalizing
 	var normalizedX = []
 	for (var i in X) {
-		normalizedX.push((nowX[i] - scaler.mean[i]) / scaler.scale[i]) //(normVals.max[i] - normVals.min[i])
+		normalizedX.push((X[i] - scaler.mean[i]) / scaler.scale[i]) //(normVals.max[i] - normVals.min[i])
 	}
 
 	console.log(normalizedX)
