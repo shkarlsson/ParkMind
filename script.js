@@ -4,7 +4,7 @@ if (isIE) {
 	alert("Det verkar som att du använder Internet Explorer. Vissa funktioner på sajten kan därför fungera dåligt. Vänligen överväg att byta till en modern webbläsare, såsom Chrome eller Firefox.")
 }
 
-var globalValues, clickArea, parkeringar, aktivParkering, referefenceMidpoints, scaler
+var globalValues, clickArea, parkeringar, aktivParkering, referefenceMidpoints, scaler, categoryColumns
 var shownFIDs = []
 var currentLocation = {}
 var minZoomToLoadFeatures = 16
@@ -376,6 +376,11 @@ function determineCororThroughML(f){
 	console.log(f)
 	let X = []
 	var la, lo
+
+
+	
+
+
 	c = getGeojsonCenter(f)
 	for (var i in scaler['name']){
 		x = scaler['name'][i]
@@ -387,6 +392,18 @@ function determineCororThroughML(f){
 			lo = String(referefenceMidpoints[x]).split(',')[1]
 			//console.log(c.y + ',' + c.x + ' - ' + la + ',' + lo)
 			X.push(getDistanceFromLatLon(c.y,c.x,la,lo))
+		}
+		else if (x.substr(0, 4) == 'cat_') { //Making one-hots
+			var cat = x.substr(4, i.lastIndexOf('_') - 4)
+			var catVal = x.substr(i.lastIndexOf('_') + 1)
+				//console.log('Checking if nowX[' + cat + '] (' + nowX[cat] + ') == ' + catVal)
+			if (nowX[cat] == catVal) {
+				//console.log('it was')
+				nowX[x] = 1
+			} else {
+				nowX[x] = 0
+			}
+			delete nowX[cat]
 		}
 		else{
 			console.log('x (' + x + ') not anywhere')
@@ -490,13 +507,20 @@ var superflousAttributes = new Promise(function(resolve, reject) {
 	});
 });
 
-Promise.all([nowX,promiseOfGeojsonData,model,referefenceMidpoints,scaler,superflousAttributes]).then(function(values) {
+var categoryColumns = new Promise(function(resolve, reject) {
+	$.getJSON("../data/categoryColumns.json", function(data) {
+		resolve(data)
+	});
+});
+
+Promise.all([nowX,promiseOfGeojsonData,model,referefenceMidpoints,scaler,superflousAttributes,categoryColumns]).then(function(values) {
 	nowX = values[0]
 	globalValues = values[1]
 	model = values[2]
 	referefenceMidpoints = values[3]
 	scaler = values[4]
 	superflousAttributes = values[5]
+	categoryColumns = values[6]
 
 	console.log(nowX)
 	console.log(globalValues)
@@ -504,6 +528,9 @@ Promise.all([nowX,promiseOfGeojsonData,model,referefenceMidpoints,scaler,superfl
 	console.log(referefenceMidpoints)
 	console.log(scaler)
 	console.log(superflousAttributes)
+	console.log(categoryColumns)
+
+
 
 	loadParkingLines()
 
