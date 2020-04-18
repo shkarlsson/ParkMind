@@ -411,8 +411,6 @@ function determineCororThroughML(f){
 	for (var i in referefenceMidpoints){
 		
 	}
-
-	
 	return colors.blue100
 }
 
