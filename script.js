@@ -395,11 +395,11 @@ function determineCororThroughML(f){
 			//console.log('Checking if nowX[' + cat + '] (' + nowX[cat] + ') == ' + catVal)
 			if (nowX[cat] == catVal) {
 				//console.log('it was')
-				nowX[x] = 1
+				X.push(1)
 			} else {
-				nowX[x] = 0
+				X.push(0)
 			}
-			delete nowX[cat]
+			//delete nowX[cat]
 		}
 		else{
 			console.log('x (' + x + ') not anywhere')
@@ -412,7 +412,7 @@ function determineCororThroughML(f){
 	//Normalizing
 	j = 0
 	var tensorArr = []
-	for (var i in nowX) {
+	for (var i in ) {
 		tensorArr.push((nowX[i] - scaler.mean[i]) / scaler.scale[i]) //(normVals.max[i] - normVals.min[i])
 	}
 
@@ -423,7 +423,7 @@ function determineCororThroughML(f){
 	//const pred = model.predict(tf_x).dataSync()
 
 	//console.log(pred)
-	
+
 	return colors.blue100
 }
 
