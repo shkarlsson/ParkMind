@@ -392,7 +392,7 @@ function determineCororThroughML(f){
 		else if (x.substr(0, 4) == 'cat_') { //Making one-hots
 			var cat = x.substr(4, i.lastIndexOf('_') - 4)
 			var catVal = x.substr(i.lastIndexOf('_') + 1)
-				//console.log('Checking if nowX[' + cat + '] (' + nowX[cat] + ') == ' + catVal)
+				console.log('Checking if nowX[' + cat + '] (' + nowX[cat] + ') == ' + catVal)
 			if (nowX[cat] == catVal) {
 				//console.log('it was')
 				nowX[x] = 1
