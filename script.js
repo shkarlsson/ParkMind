@@ -409,7 +409,6 @@ function determineCororThroughML(f){
 	console.log(X)
 	
 	for (var i in referefenceMidpoints){
-
 		
 	}
 
