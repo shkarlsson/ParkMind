@@ -377,10 +377,6 @@ function determineCororThroughML(f){
 	let X = []
 	var la, lo
 
-
-	
-
-
 	c = getGeojsonCenter(f)
 	for (var i in scaler['name']){
 		x = scaler['name'][i]
