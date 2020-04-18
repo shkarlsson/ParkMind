@@ -385,7 +385,7 @@ function determineCororThroughML(f){
 		else if (x in referefenceMidpoints){
 			la = String(referefenceMidpoints[x]).split(',')[0]
 			lo = String(referefenceMidpoints[x]).split(',')[1]
-			console.log(c.y + ',' + c.x + ' - ' + la + ',' + lo)
+			//console.log(c.y + ',' + c.x + ' - ' + la + ',' + lo)
 			X.push(getDistanceFromLatLon(c.y,c.x,la,lo))
 		}
 		else{
@@ -455,6 +455,7 @@ var nowX = new Promise(function(resolve, reject) {
 			}
 			resolver[data['field'][i]] = data['row'][i]
 		}
+		
 		resolve(resolver)
 			//resolve(data)
 	}, 'json');
