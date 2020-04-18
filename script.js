@@ -415,6 +415,8 @@ function determineCororThroughML(f){
 	for (var i in nowX) {
 		tensorArr.push((nowX[i] - scaler.mean[i]) / scaler.scale[i]) //(normVals.max[i] - normVals.min[i])
 	}
+
+	console.log(tensorArr)
 	tf_x = tf.tensor(tensorArr)
 	tf_x = tf_x.reshape([1, tensorArr.length])
 	
