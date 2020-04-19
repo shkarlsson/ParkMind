@@ -420,7 +420,7 @@ function determineCororThroughML(f){
 	tf_x = tf.tensor(normalizedX)
 	tf_x = tf_x.reshape([1, normalizedX.length])
 
-	const pred = Math.round(Array.from(model.predict(tf_x).dataSync()),1)
+	const pred = Array.from(model.predict(tf_x).dataSync())
 
 	console.log(pred)
 	f.properties.predParked = pred[0]
