@@ -420,7 +420,7 @@ function determineCororThroughML(f){
 	tf_x = tf.tensor(normalizedX)
 	tf_x = tf_x.reshape([1, normalizedX.length])
 
-	const pred = Array.from(model.predict(tf_x).dataSync())
+	const pred = Math.round(Array.from(model.predict(tf_x).dataSync()),1)
 
 	console.log(pred)
 	f.properties.predParked = pred[0]
@@ -428,7 +428,15 @@ function determineCororThroughML(f){
 	f.properties.predTotal = pred[2]
 	f.properties.predIllegal = pred[3]
 
-	return colors.blue100
+	props = f.properties
+
+	if (predFree > 1){
+		return colors.green99
+	} else if (predFree > 0){
+		return colors.orange9999
+	} else {
+		return colors.red99
+	}
 }
 
 function loadParkingLines() {
