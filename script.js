@@ -322,7 +322,7 @@ function onEachFeature(feature, layer) {
 			$('[name="FeatureId"]').val(feature.properties.FID)
 			$('.form-control').attr('disabled', false)
 			$('#bottom-floater').show()
-			console.log()
+			console.log(e.sourceTarget.feature)
 
 			aktivParkering = L.geoJson(e.sourceTarget.feature, {
 				//onEachFeature: onEachFeature,
@@ -374,7 +374,7 @@ function getGeojsonCenter(f){
 }
 
 function determineCororThroughML(f){
-	console.log(f)
+	//console.log(f)
 	let X = []
 	var la, lo
 
@@ -409,20 +409,17 @@ function determineCororThroughML(f){
 	for (var i in referefenceMidpoints){
 		
 	}
-	console.log(X)
 	//Normalizing
 	var normalizedX = []
 	for (var i in X) {
 		normalizedX.push((X[i] - scaler.mean[i]) / scaler.scale[i]) //(normVals.max[i] - normVals.min[i])
 	}
 
-	console.log(normalizedX)
 	tf_x = tf.tensor(normalizedX)
 	tf_x = tf_x.reshape([1, normalizedX.length])
 
 	const pred = Array.from(model.predict(tf_x).dataSync())
 
-	console.log(pred)
 	f.properties.predParked = pred[0]
 	f.properties.predFree = pred[1]
 	f.properties.predTotal = pred[2]
