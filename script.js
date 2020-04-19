@@ -322,6 +322,7 @@ function onEachFeature(feature, layer) {
 			$('[name="FeatureId"]').val(feature.properties.FID)
 			$('.form-control').attr('disabled', false)
 			$('#bottom-floater').show()
+			console.log()
 
 			aktivParkering = L.geoJson(e.sourceTarget.feature, {
 				//onEachFeature: onEachFeature,
