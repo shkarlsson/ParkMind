@@ -430,9 +430,9 @@ function determineCororThroughML(f){
 
 	props = f.properties
 
-	if (predFree > 1){
+	if (props.predFree > 1){
 		return colors.green99
-	} else if (predFree > 0){
+	} else if (props.predFree > 0){
 		return colors.orange9999
 	} else {
 		return colors.red99
