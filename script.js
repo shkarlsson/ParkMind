@@ -10,9 +10,9 @@ function uuidv4() {
 	)
 }
 
-if (!document.cookie.indexOf('uuid=') == -1) {
-	document.cookie='uuid=' + uuidv4()
-}
+//if (document.cookie.indexOf('uuid=') == -1) {
+document.cookie='uuid=' + uuidv4()
+//}
 
 var uuid = document.cookie.split('=')[1]
 
