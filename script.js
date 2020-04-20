@@ -562,7 +562,7 @@ Promise.all([nowX,promiseOfGeojsonData,model,referefenceMidpoints,scaler,superfl
 	console.log(scaler)
 	console.log(superflousAttributes)
 	console.log(categoryColumns)
-	console.log(valuesColumns)
+	console.log(targetColumns)
 
 
 
