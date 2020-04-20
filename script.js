@@ -192,8 +192,17 @@ function clearFormFields() {
 
 function getLengthOfParkering(ap){
 	console.log(ap)
-	var coords = ap._layers[Object.keys(ap._layers)[0]]._latlngs;
 	var length = 0
+	if ('_leaflet_id' in ap){ //This means a leaflet layer is being used.
+		var coords = ap._layers[Object.keys(ap._layers)[0]]._latlngs;
+	}
+	else { //This means a geojson feature is being used
+		var coords = []
+		for (i in ap.geometry.coordinates) {
+			coords.push({'lat':ap.geometry.coordinates[i][1],'lng':ap.geometry.coordinates[i][0]})
+		}
+	}
+	
 	for (let i = 0; i < coords.length; i++) {
 		if (i > 0) {
 			length += getDistanceFromLatLon(previousPoint.lat,previousPoint.lng,coords[i].lat,coords[i].lng)
@@ -202,6 +211,7 @@ function getLengthOfParkering(ap){
 	}
 	console.log(length)
 	return Math.round(length)
+	
 }
 
 function jsSubmitForm(e) {
@@ -381,7 +391,10 @@ function determineCororThroughML(f){
 	c = getGeojsonCenter(f)
 	for (var i in scaler['name']){
 		x = scaler['name'][i]
-		if (x in nowX){
+		if (x == 'FeatureLength') { //I need to do this because I can't send many leghts to google sheets.
+			X.push(getLengthOfParkering(f))
+		}
+		else if (x in nowX){
 			X.push(nowX[x])
 		}
 		else if (x in referefenceMidpoints){
