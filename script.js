@@ -10,7 +10,7 @@ function uuidv4() {
 	)
 }
 
-if (document.cookie.indexOf('uuid=') == -1) {
+if (!document.cookie.indexOf('uuid=') == -1) {
 	document.cookie='uuid=' + uuidv4()
 }
 
