@@ -10,12 +10,13 @@ function uuidv4() {
 	)
 }
 
-console.log(document.cookie.match('/^(.*;)? MyCookie=[^;]+(.*)?$/'))
+document.cookie.indexOf('uuid=')
 console.log(document.cookie)
 
-if (!document.cookie.match('/^(.*;)? MyCookie=[^;]+(.*)?$/')) {
-	document.cookie=uuidv4()
+if (document.cookie.indexOf('uuid=') == -1) {
+	document.cookie='uuid=' + uuidv4()
 }
+console.log(document.cookie)
 
 
 var globalValues, clickArea, parkeringar, aktivParkering, referefenceMidpoints, scaler, categoryColumns
