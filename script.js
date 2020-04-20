@@ -438,9 +438,9 @@ function determineCororThroughML(f){
 
 	props = f.properties
 
-	if (props.occupancyRate < .8){
+	if (props.OccupancyRate < .8){
 		return colors.green99
-	} else if (props.occupancyRate < .9){
+	} else if (props.OccupancyRate < .9){
 		return colors.orange9999
 	} else {
 		return colors.red99
