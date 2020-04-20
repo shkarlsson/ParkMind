@@ -16,7 +16,6 @@ if (document.cookie.indexOf('uuid=') == -1) {
 
 var uuid = document.cookie.split('=')[1]
 
-console.log(uuid)
 
 var globalValues, clickArea, parkeringar, aktivParkering, referefenceMidpoints, scaler, categoryColumns
 var shownFIDs = []
@@ -232,12 +231,10 @@ function jsSubmitForm(e) {
 	var es = $(e).serialize()
 
 	navigator.geolocation.getCurrentPosition(function(position) {
-		es += '&SenderLocation='
-		es += position.coords.latitude + ',' + position.coords.longitude
-		es += '&FeatureMidpoint='
-		es += aktivParkering.getBounds().getCenter().lat + ',' + aktivParkering.getBounds().getCenter().lng
-		es += '&FeatureLength='
-		es += getLengthOfParkering(aktivParkering)
+		es += '&SenderLocation=' + position.coords.latitude + ',' + position.coords.longitude
+		es += '&FeatureMidpoint=' + aktivParkering.getBounds().getCenter().lat + ',' + aktivParkering.getBounds().getCenter().lng
+		es += '&FeatureLength=' + getLengthOfParkering(aktivParkering)
+		es += '&uuid=' + uuid
 		console.log('The variable "es" to be json-ified and submitted is a ' + typeof es + ' and has the following value:')
 		console.log(es)
 		$.post($(e).attr('js_action'), es, function(response) {
