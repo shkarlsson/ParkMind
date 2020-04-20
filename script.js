@@ -432,17 +432,15 @@ function determineCororThroughML(f){
 	tf_x = tf_x.reshape([1, normalizedX.length])
 
 	const pred = Array.from(model.predict(tf_x).dataSync())
-
-	f.properties.predParked = pred[0]
-	f.properties.predFree = pred[1]
-	f.properties.predTotal = pred[2]
-	f.properties.predIllegal = pred[3]
+	for (var i in targetColumns){
+		f.properties[targetColumns[i]] = pred[i]
+	}
 
 	props = f.properties
 
-	if (props.predFree > 1){
+	if (props.occupancyRate < .8){
 		return colors.green99
-	} else if (props.predFree > 0){
+	} else if (props.occupancyRate < .9){
 		return colors.orange9999
 	} else {
 		return colors.red99
@@ -541,7 +539,13 @@ var categoryColumns = new Promise(function(resolve, reject) {
 	});
 });
 
-Promise.all([nowX,promiseOfGeojsonData,model,referefenceMidpoints,scaler,superflousAttributes,categoryColumns]).then(function(values) {
+var targetColumns = new Promise(function(resolve, reject) {
+	$.getJSON("../data/targetColumns.json", function(data) {
+		resolve(data)
+	});
+});
+
+Promise.all([nowX,promiseOfGeojsonData,model,referefenceMidpoints,scaler,superflousAttributes,categoryColumns,targetColumns]).then(function(values) {
 	nowX = values[0]
 	globalValues = values[1]
 	model = values[2]
@@ -549,6 +553,7 @@ Promise.all([nowX,promiseOfGeojsonData,model,referefenceMidpoints,scaler,superfl
 	scaler = values[4]
 	superflousAttributes = values[5]
 	categoryColumns = values[6]
+	targetColumns = values[7]
 
 	console.log(nowX)
 	console.log(globalValues)
@@ -557,6 +562,7 @@ Promise.all([nowX,promiseOfGeojsonData,model,referefenceMidpoints,scaler,superfl
 	console.log(scaler)
 	console.log(superflousAttributes)
 	console.log(categoryColumns)
+	console.log(valuesColumns)
 
 
 
