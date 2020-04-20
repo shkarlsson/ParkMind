@@ -396,8 +396,11 @@ function determineCororThroughML(f){
 		if (x == 'FeatureLength') { //I need to do this because I can't send many leghts to google sheets.
 			X.push(getLengthOfParkering(f))
 		}
-		else if (x == 'ObservationsByUse'){
+		else if (x == 'ObservationsByUser'){
 			X.push(100) //Något högt tal så att den ger resultat från användare som ger många observationer.
+		}
+		else if (x == 'ObservationsOfParking'){
+			X.push(20) //Något högt tal så att den ger resultat från användare som ger många observationer.
 		}
 		else if (x in nowX){
 			X.push(nowX[x])
