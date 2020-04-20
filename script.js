@@ -222,7 +222,6 @@ function getLengthOfParkering(ap){
 		}
 		previousPoint = coords[i];
 	}
-	console.log(length)
 	return Math.round(length)
 	
 }
@@ -309,7 +308,7 @@ function withinViewAndNotInMap(feature) {
 	i = feature.properties.FID
 	if (((ew1 < e && ns1 < n && ew1 > w && ns1 > s) || (ew2 < e && ns2 < n && ew2 > w && ns2 > s)) && map.getZoom() >= minZoomToLoadFeatures && shownFIDs.indexOf(i) == -1) {
 		shownFIDs.push(i)
-		console.log("Adding another feature to the map...")
+		//console.log("Adding another feature to the map...")
 		return true
 	}
 	return false
@@ -337,8 +336,7 @@ function onEachFeature(feature, layer) {
 			$('[name="FeatureId"]').val(feature.properties.FID)
 			$('.form-control').attr('disabled', false)
 			$('#bottom-floater').show()
-			console.log(e.sourceTarget.feature)
-
+			
 			aktivParkering = L.geoJson(e.sourceTarget.feature, {
 				//onEachFeature: onEachFeature,
 				style: function(params) {
