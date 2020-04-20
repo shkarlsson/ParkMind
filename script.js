@@ -199,7 +199,7 @@ function getLengthOfParkering(ap){
 	else { //This means a geojson feature is being used
 		var coords = []
 		for (i in ap.geometry.coordinates) {
-			coords.push({'lat':ap.geometry.coordinates[i][0],'lng':ap.geometry.coordinates[i][1]})
+			coords.push({'lat':ap.geometry.coordinates[i][1],'lng':ap.geometry.coordinates[i][0]})
 		}
 	}
 	
