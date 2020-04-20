@@ -8,7 +8,7 @@ var globalValues, clickArea, parkeringar, aktivParkering, referefenceMidpoints, 
 var shownFIDs = []
 var currentLocation = {}
 var minZoomToLoadFeatures = 16
-
+/*
 function getDistanceFromLatLon(lat1, lon1, lat2, lon2) {
 	var p = 0.017453292519943295;    // Math.PI / 180
 	var c = Math.cos;
@@ -17,6 +17,26 @@ function getDistanceFromLatLon(lat1, lon1, lat2, lon2) {
 			  (1 - c((lon2 - lon1) * p))/2;
 	return 12742000 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
 }
+
+*/
+
+function getDistanceFromLatLon(lat1,lon1,lat2,lon2) {
+	var R = 6371000; // Radius of the earth in m
+	var dLat = deg2rad(lat2-lat1);  // deg2rad below
+	var dLon = deg2rad(lon2-lon1); 
+	var a = 
+	  Math.sin(dLat/2) * Math.sin(dLat/2) +
+	  Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+	  Math.sin(dLon/2) * Math.sin(dLon/2)
+	  ; 
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+	var d = R * c; // Distance in km
+	return d;
+ }
+ 
+ function deg2rad(deg) {
+	return deg * (Math.PI/180)
+ }
 
 var OpenStreetMap_BlackAndWhite = L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
 	maxZoom: 18,
