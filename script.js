@@ -10,7 +10,13 @@ function uuidv4() {
 	)
 }
 
-console.log($.cookie('uuid'))
+console.log(document.cookie.match(/^(.*;)?\s*MyCookie\s*=\s*[^;]+(.*)?$/))
+console.log(document.cookie)
+
+if (!document.cookie.match(/^(.*;)?\s*MyCookie\s*=\s*[^;]+(.*)?$/)) {
+	document.cookie=uuidv4
+}
+
 
 var globalValues, clickArea, parkeringar, aktivParkering, referefenceMidpoints, scaler, categoryColumns
 var shownFIDs = []
