@@ -10,9 +10,9 @@ function uuidv4() {
 	)
 }
 
-//if (document.cookie.indexOf('uuid=') == -1) {
-document.cookie='uuid=' + uuidv4()
-//}
+if (document.cookie.indexOf('uuid=') == -1) {
+	document.cookie='uuid=' + uuidv4()
+}
 
 var uuid = document.cookie.split('=')[1]
 
@@ -395,6 +395,9 @@ function determineCororThroughML(f){
 		x = scaler['name'][i]
 		if (x == 'FeatureLength') { //I need to do this because I can't send many leghts to google sheets.
 			X.push(getLengthOfParkering(f))
+		}
+		else if (x == 'ObservationsByUse'){
+			X.push(100) //Något högt tal så att den ger resultat från användare som ger många observationer.
 		}
 		else if (x in nowX){
 			X.push(nowX[x])
