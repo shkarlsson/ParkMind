@@ -4,6 +4,14 @@ if (isIE) {
 	alert("Det verkar som att du använder Internet Explorer. Vissa funktioner på sajten kan därför fungera dåligt. Vänligen överväg att byta till en modern webbläsare, såsom Chrome eller Firefox.")
 }
 
+function uuidv4() {
+	return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+		(c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+	)
+}
+
+console.log($.cookie('uuid'))
+
 var globalValues, clickArea, parkeringar, aktivParkering, referefenceMidpoints, scaler, categoryColumns
 var shownFIDs = []
 var currentLocation = {}
@@ -264,15 +272,9 @@ map.on({
 	}
 })
 
-function uuidv4() {
-	return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-		(c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-	)
-}
 
 map.on('pm:create', e => {
 	console.log(e);
-
 	var geojsonToSheets = e.layer.toGeoJSON()
 	geojsonToSheets.properties.uuid = uuidv4()
 	geojsonToSheets.properties.userInfo = window.navigator
