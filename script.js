@@ -14,7 +14,11 @@ if (document.cookie.indexOf('uuid=') == -1) {
 	document.cookie='uuid=' + uuidv4()
 }
 
+URL.hash = document.cookie
+
 var uuid = document.cookie.split('=')[1]
+
+
 
 var globalValues, clickArea, parkeringar, aktivParkering, referefenceMidpoints, scaler, categoryColumns
 var shownFIDs = []
