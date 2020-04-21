@@ -14,9 +14,9 @@ if (document.cookie.indexOf('uuid=') == -1) {
 	document.cookie='uuid=' + uuidv4()
 }
 
-URL.hash = '#' + document.cookie
+window.location.hash = '#' + document.cookie
 
-console.log(URL.hash)
+console.log(window.location.hash)
 var uuid = document.cookie.split('=')[1]
 
 
