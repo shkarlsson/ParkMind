@@ -372,7 +372,7 @@ function getGeojsonCenter(f){
 }
 
 function determineCororThroughML(f){
-	//console.log(f)
+	console.log(f)
 	let X = []
 	var la, lo
 
@@ -391,7 +391,6 @@ function determineCororThroughML(f){
 		else if (x in dataFromSheets){
 			X.push(dataFromSheets[x])
 		}
-		console.log(aktivParkering)
 		else if (x in aktivParkering){
 			console.log(aktivParkering)
 			X.push(aktivParkering.properties[x])
