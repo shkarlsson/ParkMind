@@ -35,25 +35,6 @@ function getDistanceFromLatLon(lat1, lon1, lat2, lon2) {
 	return 12742000 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
 }
 
-var OpenStreetMap_BlackAndWhite = L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
-	maxZoom: 18,
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-})
-
-var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	maxZoom: 19,
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-})
-
-var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-})
-
-var Hydda_Full = L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
-	maxZoom: 18,
-	attribution: 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-});
-
 var baseMaps = {
 	"Ljus": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVycmthcmxzb24iLCJhIjoiY2p1MW9td3ZpMDNrazQ0cGVmMDltc3EwaSJ9.0h6iBb8t7laIu-xP7YE4CQ', {
 		tileSize: 512,
@@ -407,8 +388,12 @@ function determineCororThroughML(f){
 		else if (x == 'ObservationsOfParking'){
 			X.push(20) //Något högt tal så att den ger resultat från användare som ger många observationer.
 		}
-		else if (x in nowX){
-			X.push(nowX[x])
+		else if (x in dataFromSheets){
+			X.push(dataFromSheets[x])
+		}
+		else if (x in aktivParkering){
+			console.log(aktivParkering)
+			X.push(aktivParkering.properties[x])
 		}
 		else if (x in referefenceMidpoints){
 			la = String(referefenceMidpoints[x]).split(',')[0]
@@ -419,14 +404,14 @@ function determineCororThroughML(f){
 		else if (x.substr(0, 4) == 'cat_') { //Making one-hots
 			var cat = x.substr(4, x.lastIndexOf('_') - 4)
 			var catVal = x.substr(x.lastIndexOf('_') + 1)
-			//console.log('Checking if nowX[' + cat + '] (' + nowX[cat] + ') == ' + catVal)
-			if (nowX[cat] == catVal) {
+			//console.log('Checking if dataFromSheets[' + cat + '] (' + dataFromSheets[cat] + ') == ' + catVal)
+			if (dataFromSheets[cat] == catVal) {
 				//console.log('it was')
 				X.push(1)
 			} else {
 				X.push(0)
 			}
-			//delete nowX[cat]
+			//delete dataFromSheets[cat]
 		}
 		else{
 			console.log('x (' + x + ') not anywhere')
@@ -492,7 +477,7 @@ function loadParkingLines() {
 }
 
 var serial = 'FeatureId=30228714&SenderLocation=59.32041214046096,17.988411617590103&FeatureMidpoint=59.3202055,17.987212&FeatureLength=39' //Placeholder
-var nowX = new Promise(function(resolve, reject) {
+var dataFromSheets = new Promise(function(resolve, reject) {
 	$.get($("#gform").attr('js_action'), serial, function(response) {
 		//console.log(response)
 		var data = JSON.parse(response)
@@ -558,8 +543,8 @@ var targetColumns = new Promise(function(resolve, reject) {
 	});
 });
 
-Promise.all([nowX,promiseOfGeojsonData,model,referefenceMidpoints,scaler,superflousAttributes,categoryColumns,targetColumns]).then(function(values) {
-	nowX = values[0]
+Promise.all([dataFromSheets,promiseOfGeojsonData,model,referefenceMidpoints,scaler,superflousAttributes,categoryColumns,targetColumns]).then(function(values) {
+	dataFromSheets = values[0]
 	globalValues = values[1]
 	model = values[2]
 	referefenceMidpoints = values[3]
@@ -568,7 +553,7 @@ Promise.all([nowX,promiseOfGeojsonData,model,referefenceMidpoints,scaler,superfl
 	categoryColumns = values[6]
 	targetColumns = values[7]
 
-	console.log(nowX)
+	console.log(dataFromSheets)
 	console.log(globalValues)
 	console.log(model)
 	console.log(referefenceMidpoints)
