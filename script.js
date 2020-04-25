@@ -391,9 +391,8 @@ function determineCororThroughML(f){
 		else if (x in dataFromSheets){
 			X.push(dataFromSheets[x])
 		}
-		else if (x in aktivParkering){
-			console.log(aktivParkering)
-			X.push(aktivParkering.properties[x])
+		else if (x in f.properties){
+			X.push(f.properties[x])
 		}
 		else if (x in referefenceMidpoints){
 			la = String(referefenceMidpoints[x]).split(',')[0]
