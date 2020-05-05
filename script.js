@@ -438,7 +438,7 @@ function determineCororThroughML(f){
 	if (props.OccupancyRate < .8){
 		return colors.green99
 	} else if (props.OccupancyRate < .9){
-		return colors.orange9999
+		return colors.yellow100
 	} else {
 		return colors.red99
 	}
@@ -569,6 +569,7 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,referefenceMidpoints,scal
 		position: 'topleft',
 		collapsed: true
 	});
+	
 	legend.onAdd = function(map) {
 		var usedColors = {
 			'High': colors.green99,
@@ -586,6 +587,7 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,referefenceMidpoints,scal
 		div.innerHTML = labels.join('<br>');
 		return div;
 	};
+	
 	//legend.addTo(map); //Uncomment to add
 	disableSubmitFields()
 });
