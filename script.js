@@ -115,8 +115,8 @@ function onLocationFound(e) {
 	}
 	currentLocation.dot = L.circle(e.latlng, {
 		radius: e.coords.accuracy / 2,
-		fillColor: colors.black100,
-		color: colors.black100,
+		fillColor: colors.blue100,
+		color: colors.blue100,
 		weight: .5,
 		opacity: 1,
 		fillOpacity: 0.05
@@ -124,8 +124,8 @@ function onLocationFound(e) {
 
 	currentLocation.circle = L.circle(e.latlng, {
 		radius: 1,
-		fillColor: colors.black100,
-		color: colors.black100,
+		fillColor: colors.blue100,
+		color: colors.blue100,
 		weight: 4,
 		opacity: 1,
 		fillOpacity: 0.8
@@ -327,7 +327,7 @@ function onEachFeature(feature, layer) {
 				style: function(params) {
 					return {
 						weight: 18,
-						color: colors.purple95,
+						color: colors.blue100,
 						lineCap: 'round',
 						opacity: .7,
 					}
