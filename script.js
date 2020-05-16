@@ -189,7 +189,6 @@ function clearFormFields() {
 }
 
 function getLengthOfParkering(ap){
-	console.log(ap)
 	var length = 0
 	if ('_leaflet_id' in ap){ //This means a leaflet layer is being used.
 		var coords = ap._layers[Object.keys(ap._layers)[0]]._latlngs;
@@ -319,6 +318,7 @@ function onEachFeature(feature, layer) {
 				clearActiveSelectedParking()
 			}
 			$('[name="FeatureId"]').val(feature.properties.FID)
+			console.log(feature)
 			$('.form-control').attr('disabled', false)
 			$('#bottom-floater').show()
 			
@@ -372,7 +372,6 @@ function getGeojsonCenter(f){
 }
 
 function determineCororThroughML(f){
-	console.log(f)
 	let X = []
 	var la, lo
 
@@ -475,7 +474,7 @@ function loadParkingLines() {
 	}).addTo(map)
 }
 
-var serial = 'FeatureId=30228714&SenderLocation=59.32041214046096,17.988411617590103&FeatureMidpoint=59.3202055,17.987212&FeatureLength=39' //Placeholder
+var serial = 'FeatureId=30228714&SenderLocation=59.32041214046096,17.988411617590103&FeatureMidpoint=59.3202055,17.987212&FeatureLength=39' //Has no bearing. It's just used to get data from the server.
 var dataFromSheets = new Promise(function(resolve, reject) {
 	$.get($("#gform").attr('js_action'), serial, function(response) {
 		//console.log(response)
