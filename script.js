@@ -327,9 +327,9 @@ function onEachFeature(feature, layer) {
 				style: function(params) {
 					return {
 						weight: 18,
-						color: colors.yellow100,
+						color: colors.purple95,
 						lineCap: 'round',
-						opacity: .8,
+						opacity: .7,
 					}
 				}
 			}).addTo(map).bringToBack()
@@ -371,7 +371,7 @@ function getGeojsonCenter(f){
 	return {'x':(xMax+xMin),'y':(yMax+yMin)} //For some really weird reason, I shouldn't divide with 2 to get the average between min an max. I don't understand how, but this works.
 }
 
-function determineCororThroughML(f){
+function determineColorThroughML(f){
 	let X = []
 	var la, lo
 
@@ -426,7 +426,7 @@ function determineCororThroughML(f){
 
 	tf_x = tf.tensor(normalizedX)
 	tf_x = tf_x.reshape([1, normalizedX.length])
-
+	
 	const pred = Array.from(model.predict(tf_x).dataSync())
 	for (var i in targetColumns){
 		f.properties[targetColumns[i]] = pred[i]
@@ -452,7 +452,7 @@ function loadParkingLines() {
 		style: function(feature,layer) {
 			return {
 				weight: 8,
-				color: determineCororThroughML(feature),
+				color: determineColorThroughML(feature),
 				lineCap: 'butt',
 				opacity: 0.7,
 			}
