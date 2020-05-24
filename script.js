@@ -511,7 +511,14 @@ var model = new Promise(function(resolve, reject) {
 	resolve(data)
 });
 
-var referefenceMidpoints = new Promise(function(resolve, reject) {
+var jsonData = new Promise(function(resolve, reject) {
+	$.getJSON("../data/otherRelevantData.json", function(data) {
+		resolve(data)
+	});
+});
+
+
+/*var referefenceMidpoints = new Promise(function(resolve, reject) {
 	$.getJSON("../data/referenceMidpoints.json", function(data) {
 		resolve(data)
 	});
@@ -539,17 +546,17 @@ var targetColumns = new Promise(function(resolve, reject) {
 	$.getJSON("../data/targetColumns.json", function(data) {
 		resolve(data)
 	});
-});
+});*/
 
-Promise.all([dataFromSheets,promiseOfGeojsonData,model,referefenceMidpoints,scaler,superflousAttributes,categoryColumns,targetColumns]).then(function(values) {
+Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData/*referefenceMidpoints,scaler,superflousAttributes,categoryColumns,targetColumns*/]).then(function(values) {
 	dataFromSheets = values[0]
 	globalValues = values[1]
 	model = values[2]
-	referefenceMidpoints = values[3]
-	scaler = values[4]
-	superflousAttributes = values[5]
-	categoryColumns = values[6]
-	targetColumns = values[7]
+	referefenceMidpoints = values[3]['reference_midpoints']
+	scaler = values[3]['scaler']
+	superflousAttributes = values[3]['superflous_attributes']
+	categoryColumns = values[3]['cat_cols']
+	targetColumns = values[3]['target_columns']
 
 	console.log(dataFromSheets)
 	console.log(globalValues)
