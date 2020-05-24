@@ -511,7 +511,7 @@ var model = new Promise(function(resolve, reject) {
 	resolve(data)
 });
 
-var jsonData = new Promise(function(resolve, reject) {
+var otherRelevantData = new Promise(function(resolve, reject) {
 	$.getJSON("../data/otherRelevantData.json", function(data) {
 		resolve(data)
 	});
