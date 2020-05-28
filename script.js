@@ -554,7 +554,7 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData/*refere
 	model = values[2]
 	referefenceMidpoints = values[3]['reference_midpoints']
 	scaler = values[3]['scaler']
-	superflousAttributes = values[3]['superflous_attributes']
+	//superflousAttributes = values[3]['superflous_attributes']
 	categoryColumns = values[3]['cat_cols']
 	targetColumns = values[3]['target_columns']
 
@@ -563,7 +563,7 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData/*refere
 	console.log(model)
 	console.log(referefenceMidpoints)
 	console.log(scaler)
-	console.log(superflousAttributes)
+	//console.log(superflousAttributes)
 	console.log(categoryColumns)
 	console.log(targetColumns)
 
