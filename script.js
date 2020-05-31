@@ -10,13 +10,47 @@ function uuidv4() {
 	)
 }
 
+function CSVToArray(strData, strDelimiter) {
+	strDelimiter = (strDelimiter || ",");
+	var objPattern = new RegExp(
+		(
+			"(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
+			"(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+			"([^\"\\" + strDelimiter + "\\r\\n]*))"
+		),
+		"gi"
+	);
+	var arrData = [
+		[]
+	];
+	var arrMatches = null;
+	while (arrMatches = objPattern.exec(strData)) {
+		var strMatchedDelimiter = arrMatches[1];
+		if (
+			strMatchedDelimiter.length &&
+			strMatchedDelimiter !== strDelimiter
+		) {
+			arrData.push([]);
+		}
+		var strMatchedValue;
+		if (arrMatches[2]) {
+			strMatchedValue = arrMatches[2].replace(
+				new RegExp("\"\"", "g"),
+				"\""
+			);
+		} else {
+			strMatchedValue = arrMatches[3];
+
+		}
+		arrData[arrData.length - 1].push(strMatchedValue);
+	}
+	return (arrData);
+}
+
 if (document.cookie.indexOf('uuid=') == -1) {
 	document.cookie='uuid=' + uuidv4()
 }
 
-window.location.hash = '#' + document.cookie
-
-console.log(window.location.hash)
 var uuid = document.cookie.split('=')[1]
 
 
@@ -36,7 +70,7 @@ function getDistanceFromLatLon(lat1, lon1, lat2, lon2) {
 }
 
 var baseMaps = {
-	"Ljus": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVycmthcmxzb24iLCJhIjoiY2p1MW9td3ZpMDNrazQ0cGVmMDltc3EwaSJ9.0h6iBb8t7laIu-xP7YE4CQ', {
+	"Light": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVycmthcmxzb24iLCJhIjoiY2p1MW9td3ZpMDNrazQ0cGVmMDltc3EwaSJ9.0h6iBb8t7laIu-xP7YE4CQ', {
 		tileSize: 512,
 		zoomOffset: -1,
 	}),
@@ -53,7 +87,7 @@ var baseMaps = {
 var map = L.map('map', {
 	//center: [59.3274541, 18.0543566],
 	//zoom: 13,
-	layers: [baseMaps['Normal']],
+	layers: [baseMaps['Light']],
 	zoomControl: false,
 })
 
@@ -518,8 +552,8 @@ var otherRelevantData = new Promise(function(resolve, reject) {
 });
 
 var normalizedDatabase = new Promise(function(resolve, reject) {
-	$.getJSON("../data/normalized_database.json", function(data) {
-		resolve(data)
+	$.get("../data/normalized_database.csv", function(data) {
+		resolve(CSVToArray(data))
 	});
 });
 
