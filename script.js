@@ -555,7 +555,7 @@ var otherRelevantData = new Promise(function(resolve, reject) {
 });
 
 var normalizedDatabase = new Promise(function(resolve, reject) {
-	$.get("../data/normalized_database.json", function(data) {
+	$.get("../data/normalized_database.csv", function(data) {
 		console.log(data)
 		resolve(CSVToArray(data))
 	});
