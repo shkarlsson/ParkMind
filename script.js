@@ -517,7 +517,13 @@ var otherRelevantData = new Promise(function(resolve, reject) {
 	});
 });
 
-Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData/*referefenceMidpoints,scaler,superflousAttributes,categoryColumns,targetColumns*/]).then(function(values) {
+var normalizedDatabase = new Promise(function(resolve, reject) {
+	$.getJSON("../data/normalized_database.json", function(data) {
+		resolve(data)
+	});
+});
+
+Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData,normalizedDatabase/*referefenceMidpoints,scaler,superflousAttributes,categoryColumns,targetColumns*/]).then(function(values) {
 	dataFromSheets = values[0]
 	globalValues = values[1]
 	model = values[2]
@@ -526,7 +532,7 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData/*refere
 	//superflousAttributes = values[3]['superflous_attributes']
 	categoryColumns = values[3]['cat_cols']
 	targetColumns = values[3]['target_columns']
-
+	normalizedDatabase = values[4]
 	console.log(dataFromSheets)
 	console.log(globalValues)
 	console.log(model)
@@ -535,7 +541,7 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData/*refere
 	//console.log(superflousAttributes)
 	console.log(categoryColumns)
 	console.log(targetColumns)
-
+	console.log(normalizedDatabase)
 
 
 	loadParkingLines()
