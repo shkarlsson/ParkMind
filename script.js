@@ -517,37 +517,6 @@ var otherRelevantData = new Promise(function(resolve, reject) {
 	});
 });
 
-
-/*var referefenceMidpoints = new Promise(function(resolve, reject) {
-	$.getJSON("../data/referenceMidpoints.json", function(data) {
-		resolve(data)
-	});
-});
-
-var scaler = new Promise(function(resolve, reject) {
-	$.getJSON("../data/scaler.json", function(data) {
-		resolve(data)
-	});
-});
-
-var superflousAttributes = new Promise(function(resolve, reject) {
-	$.getJSON("../data/superflousAttributes.json", function(data) {
-		resolve(data)
-	});
-});
-
-var categoryColumns = new Promise(function(resolve, reject) {
-	$.getJSON("../data/categoryColumns.json", function(data) {
-		resolve(data)
-	});
-});
-
-var targetColumns = new Promise(function(resolve, reject) {
-	$.getJSON("../data/targetColumns.json", function(data) {
-		resolve(data)
-	});
-});*/
-
 Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData/*referefenceMidpoints,scaler,superflousAttributes,categoryColumns,targetColumns*/]).then(function(values) {
 	dataFromSheets = values[0]
 	globalValues = values[1]
