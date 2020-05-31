@@ -51,9 +51,6 @@ if (document.cookie.indexOf('uuid=') == -1) {
 	document.cookie='uuid=' + uuidv4()
 }
 
-window.location.hash = '#' + document.cookie
-
-console.log(window.location.hash)
 var uuid = document.cookie.split('=')[1]
 
 
@@ -556,7 +553,6 @@ var otherRelevantData = new Promise(function(resolve, reject) {
 
 var normalizedDatabase = new Promise(function(resolve, reject) {
 	$.get("../data/normalized_database.csv", function(data) {
-		console.log(data)
 		resolve(CSVToArray(data))
 	});
 });
