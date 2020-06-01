@@ -259,7 +259,7 @@ function jsSubmitForm(e) {
 			console.log(response)
 			$(e).append
 		}, 'json');
-		recolorThisFeature(e.elements.FeatureId.value)
+		//recolorThisFeature(e.elements.FeatureId.value)
 		clearFormFields()
 		map.closePopup();
 	})
@@ -409,6 +409,14 @@ function determineColorThroughML(f){
 	let X = []
 	var la, lo
 
+	//Below used for quickly (only once) finding the right row for osm data tied to parking locations. It's split up because the geojson file got too large when the info was contained there.
+	console.log(f.properties.FID)
+	for (rowNo in parkingWithOsmData){
+		if (f.properties.FID == parkingWithOsmData[rowNo][0]){
+			break
+		}
+	}
+
 	c = getGeojsonCenter(f)
 	for (var i in scaler['name']){
 		x = scaler['name'][i]
@@ -423,6 +431,10 @@ function determineColorThroughML(f){
 		}
 		else if (x in dataFromSheets){
 			X.push(dataFromSheets[x])
+		}
+		else if (x in parkingWithOsmData[0]){
+			colNo = parkingWithOsmData[0].indexOf(x)
+			X.push(parkingWithOsmData[rowNo][colNo])
 		}
 		else if (x in f.properties){
 			X.push(f.properties[x])
@@ -557,7 +569,13 @@ var normalizedDatabase = new Promise(function(resolve, reject) {
 	});
 });
 
-Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData,normalizedDatabase/*referefenceMidpoints,scaler,superflousAttributes,categoryColumns,targetColumns*/]).then(function(values) {
+var parkingWithOsmData = new Promise(function(resolve, reject) {
+	$.get("../data/parking_with_osm_data.csv", function(data) {
+		resolve(CSVToArray(data))
+	});
+});
+
+Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData,normalizedDatabase,parkingWithOsmData/*referefenceMidpoints,scaler,superflousAttributes,categoryColumns,targetColumns*/]).then(function(values) {
 	dataFromSheets = values[0]
 	globalValues = values[1]
 	model = values[2]
@@ -567,6 +585,7 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData,normali
 	categoryColumns = values[3]['cat_cols']
 	targetColumns = values[3]['target_columns']
 	normalizedDatabase = values[4]
+	parkingWithOsmData = values[5]
 	console.log(dataFromSheets)
 	console.log(globalValues)
 	console.log(model)
@@ -576,6 +595,7 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData,normali
 	console.log(categoryColumns)
 	console.log(targetColumns)
 	console.log(normalizedDatabase)
+	console.log(parkingWithOsmData)
 
 
 	loadParkingLines()
