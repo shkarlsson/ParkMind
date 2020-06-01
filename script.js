@@ -411,9 +411,8 @@ function determineColorThroughML(f){
 
 	//Below used for quickly (only once) finding the right row for osm data tied to parking locations. It's split up because the geojson file got too large when the info was contained there.
 	console.log(f.properties.FID)
-	for (rn in parkingWithOsmData){
-		console.log(parkingWithOsmData[rn][0])
-		if (f.properties.FID == parkingWithOsmData[rn][0]){
+	for (rowNo in parkingWithOsmData){
+		if (f.properties.FID == parkingWithOsmData[rowNo][0]){
 			break
 		}
 	}
@@ -434,7 +433,8 @@ function determineColorThroughML(f){
 			X.push(dataFromSheets[x])
 		}
 		else if (x in parkingWithOsmData[0]){
-
+			colNo = parkingWithOsmData[0].indexOf(x)
+			X.push(parkingWithOsmData[rowNo][colNo])
 		}
 		else if (x in f.properties){
 			X.push(f.properties[x])
