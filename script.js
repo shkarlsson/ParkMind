@@ -480,9 +480,9 @@ function determineColorThroughML(f){
 
 	props = f.properties
 
-	if (props.OccupancyRate < .8){
+	if (props.FreeSpots >= 2){
 		return colors.green99
-	} else if (props.OccupancyRate < .9){
+	} else if (props.FreeSpots >= 1){
 		return colors.yellow100
 	} else {
 		return colors.red99
