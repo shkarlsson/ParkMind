@@ -313,10 +313,12 @@ function containsObject(obj, list) {
 
 function withinViewAndNotInMap(feature) {
 	//console.log(Math.random())
-	var n = map.getBounds()._northEast.lat
-	var e = map.getBounds()._northEast.lng
-	var s = map.getBounds()._southWest.lat
-	var w = map.getBounds()._southWest.lng
+	y_marg = 59.321295 - 59.320403
+	x_marg = 17.991302 - 17.988620
+	var n = map.getBounds()._northEast.lat + y_marg
+	var e = map.getBounds()._northEast.lng + x_marg
+	var s = map.getBounds()._southWest.lat - y_marg
+	var w = map.getBounds()._southWest.lng - x_marg
 	var fgc = feature.geometry.coordinates
 	var ns1 = fgc[0][1]
 	var ew1 = fgc[0][0]
