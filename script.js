@@ -313,8 +313,8 @@ function containsObject(obj, list) {
 
 function withinViewAndNotInMap(feature) {
 	//console.log(Math.random())
-	y_marg = 59.321295 - 59.320403
-	x_marg = 17.991302 - 17.988620
+	y_marg = 0.002 // ≈59.321295 - 59.320403 * 2
+	x_marg = 0.006 // ≈17.991302 - 17.988620 * 2
 	var n = map.getBounds()._northEast.lat + y_marg
 	var e = map.getBounds()._northEast.lng + x_marg
 	var s = map.getBounds()._southWest.lat - y_marg
