@@ -313,10 +313,12 @@ function containsObject(obj, list) {
 
 function withinViewAndNotInMap(feature) {
 	//console.log(Math.random())
-	var n = map.getBounds()._northEast.lat
-	var e = map.getBounds()._northEast.lng
-	var s = map.getBounds()._southWest.lat
-	var w = map.getBounds()._southWest.lng
+	y_marg = 0.002 // ≈59.321295 - 59.320403 * 2
+	x_marg = 0.006 // ≈17.991302 - 17.988620 * 2
+	var n = map.getBounds()._northEast.lat + y_marg
+	var e = map.getBounds()._northEast.lng + x_marg
+	var s = map.getBounds()._southWest.lat - y_marg
+	var w = map.getBounds()._southWest.lng - x_marg
 	var fgc = feature.geometry.coordinates
 	var ns1 = fgc[0][1]
 	var ew1 = fgc[0][0]
@@ -480,9 +482,9 @@ function determineColorThroughML(f){
 
 	props = f.properties
 
-	if (props.OccupancyRate < .8){
+	if (props.FreeSpots >= 2){
 		return colors.green99
-	} else if (props.OccupancyRate < .9){
+	} else if (props.FreeSpots >= 1){
 		return colors.yellow100
 	} else {
 		return colors.red99
