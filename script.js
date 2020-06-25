@@ -246,7 +246,7 @@ function getLengthOfParkering(ap){
 
 function jsSubmitForm(e) {
 	var es = $(e).serialize()
-	console.log(currentLocation.dot)
+	console.log(currentLocation)
 	//navigator.geolocation.getCurrentPosition(function(position) {
 	if ('dot' in currentLocation){
 		es += '&SenderLocation=' + currentLocation.dot._latlng.lat + ',' + currentLocation.dot._latlng.lng
