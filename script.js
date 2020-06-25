@@ -249,7 +249,7 @@ function jsSubmitForm(e) {
 	console.log(currentLocation.dot)
 	//navigator.geolocation.getCurrentPosition(function(position) {
 	if ('dot' in currentLocation){
-		es += '&SenderLocation=' + currentLocation.dot.y + ',' + currentLocation.dot.x
+		es += '&SenderLocation=' + currentLocation.dot._latlng.lat + ',' + currentLocation.dot._latlng.lng
 		es += '&FeatureMidpoint=' + aktivParkering.getBounds().getCenter().lat + ',' + aktivParkering.getBounds().getCenter().lng
 		es += '&FeatureLength=' + getLengthOfParkering(aktivParkering)
 		es += '&uuid=' + uuid
