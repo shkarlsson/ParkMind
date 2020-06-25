@@ -246,10 +246,10 @@ function getLengthOfParkering(ap){
 
 function jsSubmitForm(e) {
 	var es = $(e).serialize()
-	console.log(currentLocation)
+	console.log(currentLocation.dot)
 	//navigator.geolocation.getCurrentPosition(function(position) {
-	if ('x' in currentLocation){
-		es += '&SenderLocation=' + currentLocation.y + ',' + currentLocation.y
+	if ('dot' in currentLocation){
+		es += '&SenderLocation=' + currentLocation.dot.y + ',' + currentLocation.dot.x
 		es += '&FeatureMidpoint=' + aktivParkering.getBounds().getCenter().lat + ',' + aktivParkering.getBounds().getCenter().lng
 		es += '&FeatureLength=' + getLengthOfParkering(aktivParkering)
 		es += '&uuid=' + uuid
