@@ -343,12 +343,12 @@ function tooZoomedStatusChange() {
 		if ('dot' in currentLocation){
 			console.log(2)
 			$('#info-splash').removeClass('invisible')
-			$('#info-splash').text('<strong>Allow location sharing to see and zoom to your location.</strong>')
+			$('#info-splash').html('<strong>Allow location sharing to see and zoom to your location.</strong>')
 		}
 		else {
 			console.log(3)
 			$('#info-splash').removeClass('invisible')
-			$('#info-splash').text('<strong>Zoom in to load more parking data</strong>')
+			$('#info-splash').html('<strong>Zoom in to load more parking data</strong>')
 		}
 	}	else {
 		console.log(4)
@@ -508,7 +508,7 @@ function determineColorThroughML(f){
 function loadParkingLines() {
 	if (map.getZoom() >= minZoomToLoadFeatures){
 		$('#info-splash').removeClass('invisible')
-		$('#info-splash').text('<strong>Loading parking data...</strong>')
+		$('#info-splash').html('<strong>Loading parking data...</strong>')
 		parkeringar = L.geoJson(globalValues, {
 			filter: function(feature, layer) {
 				return withinViewAndNotInMap(feature)
