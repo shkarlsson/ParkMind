@@ -339,7 +339,7 @@ function tooZoomedStatusChange() {
 	console.log(map.getZoom())
 	console.log(minZoomToLoadFeatures)
 	if (map.getZoom() < minZoomToLoadFeatures) {
-		if ('dot' in currentLocation){
+		if !('dot' in currentLocation){
 			$('#info-splash').removeClass('invisible')
 			$('#info-splash').html('<strong>Allow location sharing to see and zoom to your location.</strong>')
 		}
@@ -353,8 +353,8 @@ function tooZoomedStatusChange() {
 }
 
 map.on('moveend', function() {
-	loadParkingLines()
 	tooZoomedStatusChange()
+	loadParkingLines()
 });
 
 function onEachFeature(feature, layer) {
