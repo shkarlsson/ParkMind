@@ -250,9 +250,6 @@ function jsSubmitForm(e) {
 	if ('dot' in currentLocation){
 		es += '&SenderLocation=' + currentLocation.dot._latlng.lat + ',' + currentLocation.dot._latlng.lng
 	}
-	else{
-		es += '&SenderLocation='
-	}
 	es += '&FeatureMidpoint=' + aktivParkering.getBounds().getCenter().lat + ',' + aktivParkering.getBounds().getCenter().lng
 	es += '&FeatureLength=' + getLengthOfParkering(aktivParkering)
 	es += '&uuid=' + uuid
