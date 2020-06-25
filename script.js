@@ -337,7 +337,7 @@ function withinViewAndNotInMap(feature) {
 
 function tooZoomedStatusChange() {
 	if (map.getZoom() < minZoomToLoadFeatures) {
-		if !('dot' in currentLocation){
+		if ('dot' in currentLocation){
 			$('#info-splash').removeClass('invisible')
 			$('#info-splash').text('<strong>Allow location sharing to see and zoom to your location.</strong>')
 		}
