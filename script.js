@@ -172,7 +172,10 @@ map.locate({
 	setView: true,
 	zoom: 14,
 	watch: false,
-})
+}).on('errorEvent', function(e) {
+	console.log('errorEvent being handled very smoothly...')
+	console.log(e)
+});
 
 var colors = {
 	'red99': '#e6194B',
@@ -272,17 +275,18 @@ function panMapToPosition(position) {
 	onLocationFound(position)
 }
 
-function getLocation() {
-	if (navigator.geolocation) {
-		navigator.geolocation.watchPosition(panMapToPosition)
-	} else {
-		console.log("Geolocation is not supported by this browser.")
-		//$('[name="SenderLocation"]').val('NotAvailable')
-	}
 
+try {
+	navigator.geolocation.watchPosition(panMapToPosition)
+} catch (evt){
+	console.log(evt)
+	console.log("No geolocation given...")
+	//$('[name="SenderLocation"]').val('NotAvailable')
 }
 
-getLocation()
+
+
+
 
 map.on({
 	click: function(e) {
