@@ -241,15 +241,15 @@ function getLengthOfParkering(ap){
 		previousPoint = coords[i];
 	}
 	return Math.round(length)
-	
 }
 
 function jsSubmitForm(e) {
 	var es = $(e).serialize()
 	console.log(currentLocation)
 	//navigator.geolocation.getCurrentPosition(function(position) {
-	//if ('dot' in currentLocation){
-	es += '&SenderLocation=' + currentLocation.dot._latlng.lat + ',' + currentLocation.dot._latlng.lng
+	if ('dot' in currentLocation){
+		es += '&SenderLocation=' + currentLocation.dot._latlng.lat + ',' + currentLocation.dot._latlng.lng
+	}
 	es += '&FeatureMidpoint=' + aktivParkering.getBounds().getCenter().lat + ',' + aktivParkering.getBounds().getCenter().lng
 	es += '&FeatureLength=' + getLengthOfParkering(aktivParkering)
 	es += '&uuid=' + uuid
@@ -263,7 +263,7 @@ function jsSubmitForm(e) {
 	//recolorThisFeature(e.elements.FeatureId.value)
 	clearFormFields()
 	map.closePopup();
-	//}
+	
 	//})
 	clearActiveSelectedParking()
 	return false;
