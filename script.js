@@ -173,7 +173,7 @@ map.locate({
 	setView: true,
 	zoom: 14,
 	watch: false,
-	timeout: 1000
+	timeout: 100000
 },{errorEvent: function(e) {
 	console.log('errorEvent being handled very smoothly...')
 	console.log(e)
