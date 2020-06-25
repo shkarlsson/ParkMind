@@ -245,7 +245,6 @@ function getLengthOfParkering(ap){
 
 function jsSubmitForm(e) {
 	var es = $(e).serialize()
-	console.log(currentLocation)
 	//navigator.geolocation.getCurrentPosition(function(position) {
 	if ('dot' in currentLocation){
 		es += '&SenderLocation=' + currentLocation.dot._latlng.lat + ',' + currentLocation.dot._latlng.lng
@@ -278,7 +277,7 @@ function getLocation() {
 		navigator.geolocation.watchPosition(panMapToPosition)
 	} else {
 		console.log("Geolocation is not supported by this browser.")
-		$('[name="SenderLocation"]').val('NotAvailable')
+		//$('[name="SenderLocation"]').val('NotAvailable')
 	}
 
 }
@@ -328,7 +327,7 @@ function withinViewAndNotInMap(feature) {
 	var ew2 = fgc[fgc.length - 1][0]
 
 	i = feature.properties.FID
-	if (((ew1 < e && ns1 < n && ew1 > w && ns1 > s) || (ew2 < e && ns2 < n && ew2 > w && ns2 > s)) && map.getZoom() >= minZoomToLoadFeatures && shownFIDs.indexOf(i) == -1) {
+	if (((ew1 < e && ns1 < n && ew1 > w && ns1 > s) || (ew2 < e && ns2 < n && ew2 > w && ns2 > s)) && shownFIDs.indexOf(i) == -1) {
 		shownFIDs.push(i)
 		//console.log("Adding another feature to the map...")
 		return true
@@ -338,9 +337,16 @@ function withinViewAndNotInMap(feature) {
 
 function tooZoomedStatusChange() {
 	if (map.getZoom() < minZoomToLoadFeatures) {
-		$('#too-zoomed-out-warning').removeClass('invisible')
-	} else {
-		$('#too-zoomed-out-warning').addClass('invisible')
+		if !('dot' in currentLocation){
+			$('#info-splash').removeClass('invisible')
+			$('#info-splash').text('<strong>Allow location sharing to see and zoom to your location.</strong>')
+		}
+		else 
+			$('#info-splash').removeClass('invisible')
+			$('#info-splash').text('<strong>Zoom in to load more parking data</strong>')
+		}
+	else {
+		$('#info-splash').addClass('invisible')
 	}
 }
 
@@ -494,34 +500,38 @@ function determineColorThroughML(f){
 }
 
 function loadParkingLines() {
-	parkeringar = L.geoJson(globalValues, {
-		//onEachFeature: onEachFeature,
-		filter: function(feature, layer) {
-			return withinViewAndNotInMap(feature)
-		},
-		style: function(feature,layer) {
-			return {
-				weight: 8,
-				color: determineColorThroughML(feature),
-				lineCap: 'butt',
-				opacity: 0.7,
+	if (map.getZoom() >= minZoomToLoadFeatures){
+		$('#info-splash').removeClass('invisible')
+		$('#info-splash').text('<strong>Loading parking data...</strong>')
+		parkeringar = L.geoJson(globalValues, {
+			filter: function(feature, layer) {
+				return withinViewAndNotInMap(feature)
+			},
+			style: function(feature,layer) {
+				return {
+					weight: 8,
+					color: determineColorThroughML(feature),
+					lineCap: 'butt',
+					opacity: 0.7,
+				}
 			}
-		}
-	}).addTo(map)
-	clickArea = L.geoJson(globalValues, {
-		onEachFeature: onEachFeature,
-		filter: function(feature, layer) {
-			return shownFIDs.indexOf(feature.properties.FID) > -1
-		},
-		style: function(params) {
-			return {
-				weight: 20,
-				color: colors.blue100,
-				lineCap: 'butt',
-				opacity: 0.0,
+		}).addTo(map)
+		clickArea = L.geoJson(globalValues, {
+			onEachFeature: onEachFeature,
+			filter: function(feature, layer) {
+				return shownFIDs.indexOf(feature.properties.FID) > -1
+			},
+			style: function(params) {
+				return {
+					weight: 20,
+					color: colors.blue100,
+					lineCap: 'butt',
+					opacity: 0.0,
+				}
 			}
-		}
-	}).addTo(map)
+		}).addTo(map)
+		$('#info-splash').addClass('invisible')
+	}
 }
 
 var serial = 'FeatureId=30228714&SenderLocation=59.32041214046096,17.988411617590103&FeatureMidpoint=59.3202055,17.987212&FeatureLength=39' //Has no bearing. It's just used to get data from the server.
@@ -585,7 +595,6 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData,normali
 	model = values[2]
 	referefenceMidpoints = values[3]['reference_midpoints']
 	scaler = values[3]['scaler']
-	//superflousAttributes = values[3]['superflous_attributes']
 	categoryColumns = values[3]['cat_cols']
 	targetColumns = values[3]['target_columns']
 	normalizedDatabase = values[4]
@@ -595,12 +604,10 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData,normali
 	console.log(model)
 	console.log(referefenceMidpoints)
 	console.log(scaler)
-	//console.log(superflousAttributes)
 	console.log(categoryColumns)
 	console.log(targetColumns)
 	console.log(normalizedDatabase)
 	console.log(parkingWithOsmData)
-
 
 	loadParkingLines()
 
