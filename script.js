@@ -172,10 +172,11 @@ map.locate({
 	setView: true,
 	zoom: 14,
 	watch: false,
-}).on('errorEvent', function(e) {
+},{errorEvent: function(e) {
 	console.log('errorEvent being handled very smoothly...')
 	console.log(e)
-});
+}})
+
 
 var colors = {
 	'red99': '#e6194B',
@@ -340,8 +341,6 @@ function withinViewAndNotInMap(feature) {
 }
 
 function tooZoomedStatusChange() {
-	console.log(map.getZoom())
-	console.log(minZoomToLoadFeatures)
 	if (map.getZoom() < minZoomToLoadFeatures) {
 		if (!('dot' in currentLocation)){
 			$('#info-splash').removeClass('invisible')
