@@ -164,7 +164,6 @@ function onLocationFound(e) {
 		opacity: 1,
 		fillOpacity: 0.8
 	}).addTo(map);
-
 }
 
 //map.on('locationfound', onLocationFound);
@@ -172,6 +171,7 @@ map.locate({
 	setView: true,
 	zoom: 14,
 	watch: false,
+	timeout: 1000
 },{errorEvent: function(e) {
 	console.log('errorEvent being handled very smoothly...')
 	console.log(e)
