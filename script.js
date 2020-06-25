@@ -241,28 +241,30 @@ function getLengthOfParkering(ap){
 		previousPoint = coords[i];
 	}
 	return Math.round(length)
-	
 }
 
 function jsSubmitForm(e) {
 	var es = $(e).serialize()
-
-	navigator.geolocation.getCurrentPosition(function(position) {
-		es += '&SenderLocation=' + position.coords.latitude + ',' + position.coords.longitude
-		es += '&FeatureMidpoint=' + aktivParkering.getBounds().getCenter().lat + ',' + aktivParkering.getBounds().getCenter().lng
-		es += '&FeatureLength=' + getLengthOfParkering(aktivParkering)
-		es += '&uuid=' + uuid
-		console.log('The variable "es" to be json-ified and submitted is a ' + typeof es + ' and has the following value:')
-		console.log(es)
-		$.post($(e).attr('js_action'), es, function(response) {
-			// do something here on success
-			console.log(response)
-			$(e).append
-		}, 'json');
-		//recolorThisFeature(e.elements.FeatureId.value)
-		clearFormFields()
-		map.closePopup();
-	})
+	console.log(currentLocation)
+	//navigator.geolocation.getCurrentPosition(function(position) {
+	if ('dot' in currentLocation){
+		es += '&SenderLocation=' + currentLocation.dot._latlng.lat + ',' + currentLocation.dot._latlng.lng
+	}
+	es += '&FeatureMidpoint=' + aktivParkering.getBounds().getCenter().lat + ',' + aktivParkering.getBounds().getCenter().lng
+	es += '&FeatureLength=' + getLengthOfParkering(aktivParkering)
+	es += '&uuid=' + uuid
+	console.log('The variable "es" to be json-ified and submitted is a ' + typeof es + ' and has the following value:')
+	console.log(es)
+	$.post($(e).attr('js_action'), es, function(response) {
+		// do something here on success
+		console.log(response)
+		$(e).append
+	}, 'json');
+	//recolorThisFeature(e.elements.FeatureId.value)
+	clearFormFields()
+	map.closePopup();
+	
+	//})
 	clearActiveSelectedParking()
 	return false;
 }
