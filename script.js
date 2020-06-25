@@ -339,19 +339,15 @@ function tooZoomedStatusChange() {
 	console.log(map.getZoom())
 	console.log(minZoomToLoadFeatures)
 	if (map.getZoom() < minZoomToLoadFeatures) {
-		console.log(1)
 		if ('dot' in currentLocation){
-			console.log(2)
 			$('#info-splash').removeClass('invisible')
 			$('#info-splash').html('<strong>Allow location sharing to see and zoom to your location.</strong>')
 		}
 		else {
-			console.log(3)
 			$('#info-splash').removeClass('invisible')
 			$('#info-splash').html('<strong>Zoom in to load more parking data</strong>')
 		}
 	}	else {
-		console.log(4)
 		$('#info-splash').addClass('invisible')
 	}
 }
