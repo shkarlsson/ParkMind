@@ -139,6 +139,8 @@ $(document).keyup(function(e) {
 });
 
 function onLocationFound(e) {
+	console.log('running onLocationFound(e)')
+	console.log(e)
 	//L.marker(e.latlng).addTo(map)
 	//	.bindPopup("You are within " + radius + " meters from this point").openPopup();
 	e.latlng = [e.coords.latitude, e.coords.longitude];
@@ -272,13 +274,9 @@ function jsSubmitForm(e) {
 	return false;
 }
 
-function panMapToPosition(position) {
-	onLocationFound(position)
-}
-
 
 try {
-	navigator.geolocation.watchPosition(panMapToPosition)
+	navigator.geolocation.watchPosition(onLocationFound)
 } catch (evt){
 	console.log(evt)
 	console.log("No geolocation given...")
