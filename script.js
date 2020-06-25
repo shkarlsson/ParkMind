@@ -338,7 +338,7 @@ function withinViewAndNotInMap(feature) {
 function tooZoomedStatusChange() {
 	console.log(map.getZoom())
 	console.log(minZoomToLoadFeatures)
-	if (map.getZoom() > minZoomToLoadFeatures) {
+	if (map.getZoom() < minZoomToLoadFeatures) {
 		console.log(1)
 		if ('dot' in currentLocation){
 			console.log(2)
