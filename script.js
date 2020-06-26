@@ -123,7 +123,8 @@ function updateInfoBox(text){
 	else {
 		console.log('NOT (text.length == 0)')
 		$('#info-box').removeClass('invisible')
-		$('#info-box').html('<strong>' + text + '</strong>')
+		htmlString = '<strong>' + text + '</strong>'
+		$('#info-box').html(htmlString)
 	}
 }
 
