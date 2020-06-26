@@ -85,8 +85,8 @@ var baseMaps = {
 }
 
 var map = L.map('map', {
-	//center: [59.3274541, 18.0543566],
-	//zoom: 13,
+	center: [59.3274541, 18.0543566],
+	zoom: 13,
 	layers: [baseMaps['Light']],
 	zoomControl: false,
 })
@@ -137,6 +137,9 @@ $(document).keyup(function(e) {
 
 	}
 });
+function onFirstLocationFound(e){
+	map.panTo([e.coords.latitude, e.coords.longitude])
+}
 
 function onLocationFound(e) {
 	console.log('running onLocationFound(e)')
@@ -169,7 +172,7 @@ function onLocationFound(e) {
 }
 
 //map.on('locationfound', onLocationFound);
-map.locate({
+/*map.locate({
 	setView: true,
 	zoom: 14,
 	watch: false,
@@ -177,7 +180,7 @@ map.locate({
 },{errorEvent: function(e) {
 	console.log('errorEvent being handled very smoothly...')
 	console.log(e)
-}})
+}})*/
 
 
 var colors = {
@@ -276,6 +279,7 @@ function jsSubmitForm(e) {
 
 
 try {
+	navigator.geolocation.getCurrentPosition(onFirstLocationFound)
 	navigator.geolocation.watchPosition(onLocationFound)
 } catch (evt){
 	console.log(evt)
