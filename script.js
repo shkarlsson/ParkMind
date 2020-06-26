@@ -116,11 +116,9 @@ function disableSubmitFields() {
 
 function updateInfoBox(text){
 	if (text.length == 0){
-		console.log('(text.length == 0)')
 		$('#info-box').addClass('invisible')	
 	}
 	else {
-		console.log('NOT (text.length == 0)')
 		$('#info-box').removeClass('invisible')
 		textWidthStringWithPx = (text.length*(-3.03)+4.4).toString() + 'px'
 		$('#info-box').css({marginLeft:textWidthStringWithPx})
@@ -371,8 +369,10 @@ function tooZoomedStatusChange() {
 			//$('#info-box').removeClass('invisible')
 			//$('#info-box').html('<strong>Zoom in to load more parking data.</strong>')
 		}
+		return true
 	}	else {
 		updateInfoBox('')
+		return false
 		//$('#info-box').addClass('invisible')
 	}
 }
@@ -526,8 +526,7 @@ function determineColorThroughML(f){
 }
 
 function loadParkingLines() {
-	tooZoomedStatusChange()
-	if (map.getZoom() >= minZoomToLoadFeatures){
+	if (!tooZoomedStatusChange()){
 		updateInfoBox('Loading parking data...')
 		//$('#info-box').removeClass('invisible')
 		//$('#info-box').html('<strong>Loading parking data...</strong>')
@@ -558,7 +557,7 @@ function loadParkingLines() {
 				}
 			}
 		}).addTo(map)
-		updateInfoBox('')
+		//updateInfoBox('')
 		//$('#info-box').addClass('invisible')
 	}
 }
