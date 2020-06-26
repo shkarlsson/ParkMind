@@ -160,9 +160,9 @@ function onLocationFound(e) {
 	console.log(e)
 	e.latlng = [e.coords.latitude, e.coords.longitude];
 	if (!firstLocationFound){
-		updateInfoBox('Figuring out parking availability...')
 		map.setView(e.latlng,17);
 		firstLocationFound = true
+		updateInfoBox('Figuring out parking availability...')
 	}
 	//L.marker(e.latlng).addTo(map)
 	//	.bindPopup("You are within " + radius + " meters from this point").openPopup();
