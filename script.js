@@ -117,9 +117,11 @@ function disableSubmitFields() {
 function updateInfoBox(text){
 	console.log(text)
 	if (text.length == 0){
+		console.log('(text.length == 0)')
 		$('#info-box').addClass('invisible')	
 	}
 	else {
+		console.log('NOT (text.length == 0)')
 		$('#info-box').removeClass('invisible')
 		$('#info-box').html('<strong>' + text + '</strong>')
 	}
