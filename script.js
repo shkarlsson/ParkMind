@@ -527,7 +527,7 @@ function determineColorThroughML(f){
 
 function loadParkingLines() {
 	if (!checkZoomAndUserLocAndHeavyDataLoaded()){
-		setTimeout(function(){ //Don't know why, but this code runs before updateInfoBox without setTimeout().
+		setTimeout(function(){ //Don't know why, but this code runs before code right before it, when there is any there.
 			parkeringar = L.geoJson(globalValues, {
 				filter: function(feature, layer) {
 					return withinViewAndNotInMap(feature)
@@ -556,7 +556,7 @@ function loadParkingLines() {
 				}
 			}).addTo(map)
 			updateInfoBox('')
-		}, 10);
+		}, 0);
 		//$('#info-box').removeClass('invisible')
 		//$('#info-box').html('<strong>Loading parking data...</strong>')
 		//$('#info-box').addClass('invisible')
