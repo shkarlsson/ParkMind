@@ -87,7 +87,7 @@ var baseMaps = {
 
 var map = L.map('map', {
 	center: [59.3274541, 18.0543566],
-	zoom: 13,
+	zoom: 11,
 	layers: [baseMaps['Light']],
 	zoomControl: false,
 })
@@ -159,7 +159,7 @@ function onLocationFound(e) {
 	console.log(e)
 	e.latlng
 	if (!firstLocationFound){
-		map.setView(e.latlng,17);
+		map.setView(e.latlng,16);
 		firstLocationFound = true
 	}
 	//L.marker(e.latlng).addTo(map)
