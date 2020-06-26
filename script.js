@@ -59,6 +59,8 @@ var globalValues, clickArea, parkeringar, aktivParkering, referefenceMidpoints, 
 var shownFIDs = []
 var currentLocation = {}
 var minZoomToLoadFeatures = 16
+var firstLocationFound = false
+var heavyDataLoaded = false
 
 function getDistanceFromLatLon(lat1, lon1, lat2, lon2) {
 	var p = 0.017453292519943295;    // Math.PI / 180
@@ -85,8 +87,8 @@ var baseMaps = {
 }
 
 var map = L.map('map', {
-	//center: [59.3274541, 18.0543566],
-	//zoom: 13,
+	center: [59.3274541, 18.0543566],
+	zoom: 11,
 	layers: [baseMaps['Light']],
 	zoomControl: false,
 })
@@ -114,8 +116,23 @@ function disableSubmitFields() {
 	$('#bottom-floater').hide()
 }
 
+function updateInfoBox(text){
+	if (text.length == 0){
+		$('#info-box').addClass('invisible')	
+	}
+	else {
+		$('#info-box').removeClass('invisible')
+		textWidthStringWithPx = (text.length*(-3.03)+4.4).toString() + 'px'
+		$('#info-box').css({marginLeft:textWidthStringWithPx})
+		$('#info-box').html('<strong>' + text + '</strong>')
+	}
+}
 
 $(document).ready(function() {
+	updateInfoBox('Allow location access to zoom to your location (or just zoom there manually).')
+	//$('#info-box').removeClass('invisible')
+	//$('#info-box').html('<strong>Loading lots of data...</strong>')
+
 	$('#add-button').click(function() {
 		//alert("button pressed");
 		console.log(currentLocation.dot)
@@ -139,9 +156,16 @@ $(document).keyup(function(e) {
 });
 
 function onLocationFound(e) {
+	console.log('running onLocationFound(e)')
+	console.log(e)
+	e.latlng = [e.coords.latitude, e.coords.longitude];
+	if (!firstLocationFound){
+		map.setView(e.latlng,18);
+		firstLocationFound = true
+	}
 	//L.marker(e.latlng).addTo(map)
 	//	.bindPopup("You are within " + radius + " meters from this point").openPopup();
-	e.latlng = [e.coords.latitude, e.coords.longitude];
+
 
 	if (currentLocation.dot) {
 		map.removeLayer(currentLocation.dot)
@@ -164,15 +188,7 @@ function onLocationFound(e) {
 		opacity: 1,
 		fillOpacity: 0.8
 	}).addTo(map);
-
 }
-
-//map.on('locationfound', onLocationFound);
-map.locate({
-	setView: true,
-	zoom: 14,
-	watch: false,
-})
 
 var colors = {
 	'red99': '#e6194B',
@@ -245,7 +261,6 @@ function getLengthOfParkering(ap){
 
 function jsSubmitForm(e) {
 	var es = $(e).serialize()
-	console.log(currentLocation)
 	//navigator.geolocation.getCurrentPosition(function(position) {
 	if ('dot' in currentLocation){
 		es += '&SenderLocation=' + currentLocation.dot._latlng.lat + ',' + currentLocation.dot._latlng.lng
@@ -269,21 +284,18 @@ function jsSubmitForm(e) {
 	return false;
 }
 
-function panMapToPosition(position) {
-	onLocationFound(position)
+
+try {
+	navigator.geolocation.watchPosition(onLocationFound)
+} catch (evt){
+	console.log(evt)
+	console.log("No geolocation given...")
+	//$('[name="SenderLocation"]').val('NotAvailable')
 }
 
-function getLocation() {
-	if (navigator.geolocation) {
-		navigator.geolocation.watchPosition(panMapToPosition)
-	} else {
-		console.log("Geolocation is not supported by this browser.")
-		$('[name="SenderLocation"]').val('NotAvailable')
-	}
 
-}
 
-getLocation()
+
 
 map.on({
 	click: function(e) {
@@ -328,7 +340,7 @@ function withinViewAndNotInMap(feature) {
 	var ew2 = fgc[fgc.length - 1][0]
 
 	i = feature.properties.FID
-	if (((ew1 < e && ns1 < n && ew1 > w && ns1 > s) || (ew2 < e && ns2 < n && ew2 > w && ns2 > s)) && map.getZoom() >= minZoomToLoadFeatures && shownFIDs.indexOf(i) == -1) {
+	if (((ew1 < e && ns1 < n && ew1 > w && ns1 > s) || (ew2 < e && ns2 < n && ew2 > w && ns2 > s)) && shownFIDs.indexOf(i) == -1) {
 		shownFIDs.push(i)
 		//console.log("Adding another feature to the map...")
 		return true
@@ -336,17 +348,37 @@ function withinViewAndNotInMap(feature) {
 	return false
 }
 
-function tooZoomedStatusChange() {
+function checkZoomAndUserLocAndHeavyDataLoaded() {
 	if (map.getZoom() < minZoomToLoadFeatures) {
-		$('#too-zoomed-out-warning').removeClass('invisible')
+		if (!('dot' in currentLocation)){
+			updateInfoBox('Allow location access to see and zoom to your location (or just zoom there manually).')
+			//$('#info-box').removeClass('invisible')
+			//$('#info-box').html('<strong>Allow location access to see and zoom to your location (or just zoom there manually).</strong>')
+		}
+		else {
+			updateInfoBox('Zoom in to load more parking data.')
+			//$('#info-box').removeClass('invisible')
+			//$('#info-box').html('<strong>Zoom in to load more parking data.</strong>')
+		}
+		return true
 	} else {
-		$('#too-zoomed-out-warning').addClass('invisible')
+		if (!heavyDataLoaded) {
+			updateInfoBox('Loading lots of data...')
+			return true
+		}
+		else if (shownFIDs.length == 0) { //This is for the first load which can be a bit heavy.
+			updateInfoBox('Figuring out parking availability...')
+		}
+		else {
+			updateInfoBox('')
+			return false
+		}
+		//$('#info-box').addClass('invisible')
 	}
 }
 
 map.on('moveend', function() {
 	loadParkingLines()
-	tooZoomedStatusChange()
 });
 
 function onEachFeature(feature, layer) {
@@ -494,34 +526,41 @@ function determineColorThroughML(f){
 }
 
 function loadParkingLines() {
-	parkeringar = L.geoJson(globalValues, {
-		//onEachFeature: onEachFeature,
-		filter: function(feature, layer) {
-			return withinViewAndNotInMap(feature)
-		},
-		style: function(feature,layer) {
-			return {
-				weight: 8,
-				color: determineColorThroughML(feature),
-				lineCap: 'butt',
-				opacity: 0.7,
-			}
-		}
-	}).addTo(map)
-	clickArea = L.geoJson(globalValues, {
-		onEachFeature: onEachFeature,
-		filter: function(feature, layer) {
-			return shownFIDs.indexOf(feature.properties.FID) > -1
-		},
-		style: function(params) {
-			return {
-				weight: 20,
-				color: colors.blue100,
-				lineCap: 'butt',
-				opacity: 0.0,
-			}
-		}
-	}).addTo(map)
+	if (!checkZoomAndUserLocAndHeavyDataLoaded()){
+		setTimeout(function(){ //Don't know why, but this code runs before code right before it, when there is any there.
+			parkeringar = L.geoJson(globalValues, {
+				filter: function(feature, layer) {
+					return withinViewAndNotInMap(feature)
+				},
+				style: function(feature,layer) {
+					return {
+						weight: 8,
+						color: determineColorThroughML(feature),
+						lineCap: 'butt',
+						opacity: 0.7,
+					}
+				}
+			}).addTo(map)
+			clickArea = L.geoJson(globalValues, {
+				onEachFeature: onEachFeature,
+				filter: function(feature, layer) {
+					return shownFIDs.indexOf(feature.properties.FID) > -1
+				},
+				style: function(params) {
+					return {
+						weight: 20,
+						color: colors.blue100,
+						lineCap: 'butt',
+						opacity: 0.0,
+					}
+				}
+			}).addTo(map)
+			updateInfoBox('')
+		}, 0);
+		//$('#info-box').removeClass('invisible')
+		//$('#info-box').html('<strong>Loading parking data...</strong>')
+		//$('#info-box').addClass('invisible')
+	}
 }
 
 var serial = 'FeatureId=30228714&SenderLocation=59.32041214046096,17.988411617590103&FeatureMidpoint=59.3202055,17.987212&FeatureLength=39' //Has no bearing. It's just used to get data from the server.
@@ -585,7 +624,6 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData,normali
 	model = values[2]
 	referefenceMidpoints = values[3]['reference_midpoints']
 	scaler = values[3]['scaler']
-	//superflousAttributes = values[3]['superflous_attributes']
 	categoryColumns = values[3]['cat_cols']
 	targetColumns = values[3]['target_columns']
 	normalizedDatabase = values[4]
@@ -595,12 +633,11 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData,normali
 	console.log(model)
 	console.log(referefenceMidpoints)
 	console.log(scaler)
-	//console.log(superflousAttributes)
 	console.log(categoryColumns)
 	console.log(targetColumns)
 	console.log(normalizedDatabase)
 	console.log(parkingWithOsmData)
-
+	heavyDataLoaded = true
 
 	loadParkingLines()
 
