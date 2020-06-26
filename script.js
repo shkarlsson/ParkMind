@@ -129,7 +129,7 @@ function updateInfoBox(text){
 }
 
 $(document).ready(function() {
-	updateInfoBox('Allow location access to see and zoom to your location (or just zoom there manually).')
+	updateInfoBox('Allow location access to zoom to your location (or just zoom there manually).')
 	//$('#info-box').removeClass('invisible')
 	//$('#info-box').html('<strong>Loading lots of data...</strong>')
 
@@ -365,6 +365,9 @@ function checkZoomAndUserLocAndHeavyDataLoaded() {
 		if (!heavyDataLoaded) {
 			updateInfoBox('Loading lots of data...')
 			return true
+		}
+		else if (shownFIDs.length == 0) { //This is for the first load which can be a bit heavy.
+			updateInfoBox('Figuring out parking availability...')
 		}
 		else {
 			updateInfoBox('')
