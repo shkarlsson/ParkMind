@@ -350,7 +350,7 @@ function withinViewAndNotInMap(feature) {
 
 function checkZoomAndUserLocAndHeavyDataLoaded() {
 	if (map.getZoom() < minZoomToLoadFeatures) {
-		if (!('dot' in currentLocation)){
+		/*if (!('dot' in currentLocation)){
 			updateInfoBox('Head over to your location.')
 			//$('#info-box').removeClass('invisible')
 			//$('#info-box').html('<strong>Allow location access to see and zoom to your location (or just zoom there manually).</strong>')
@@ -359,7 +359,8 @@ function checkZoomAndUserLocAndHeavyDataLoaded() {
 			updateInfoBox('Zoom in to load more parking data.')
 			//$('#info-box').removeClass('invisible')
 			//$('#info-box').html('<strong>Zoom in to load more parking data.</strong>')
-		}
+		}*/
+		updateInfoBox('Zoom in to load more parking data.')
 		return true
 	} else {
 		if (!heavyDataLoaded) {
