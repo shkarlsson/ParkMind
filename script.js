@@ -556,7 +556,7 @@ function loadParkingLines() {
 				}
 			}).addTo(map)
 			updateInfoBox('')
-		}, 0);
+		}, 10);
 		//$('#info-box').removeClass('invisible')
 		//$('#info-box').html('<strong>Loading parking data...</strong>')
 		//$('#info-box').addClass('invisible')
