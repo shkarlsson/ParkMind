@@ -527,7 +527,7 @@ function determineColorThroughML(f){
 
 function loadParkingLines() {
 	if (!tooZoomedStatusChange()){
-		updateInfoBox('Loading parking data...')
+		updateInfoBox('Figuring out parking availability...')
 		setTimeout(function(){ //Don't know why, but this code runs before updateInfoBox without setTimeout().
 			parkeringar = L.geoJson(globalValues, {
 				filter: function(feature, layer) {
