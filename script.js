@@ -159,6 +159,7 @@ function onLocationFound(e) {
 	console.log(e)
 	if (!firstLocationFound){
 		map.panTo([e.coords.latitude, e.coords.longitude])
+		map.setZoom(14);
 		firstLocationFound = true
 	}
 	//L.marker(e.latlng).addTo(map)
@@ -187,18 +188,6 @@ function onLocationFound(e) {
 		fillOpacity: 0.8
 	}).addTo(map);
 }
-
-//map.on('locationfound', onLocationFound);
-/*map.locate({
-	setView: true,
-	zoom: 14,
-	watch: false,
-	timeout: 100000
-},{errorEvent: function(e) {
-	console.log('errorEvent being handled very smoothly...')
-	console.log(e)
-}})*/
-
 
 var colors = {
 	'red99': '#e6194B',
