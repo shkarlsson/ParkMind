@@ -162,7 +162,6 @@ function onLocationFound(e) {
 	if (!firstLocationFound){
 		map.setView(e.latlng,17);
 		firstLocationFound = true
-		updateInfoBox('Figuring out parking availability...')
 	}
 	//L.marker(e.latlng).addTo(map)
 	//	.bindPopup("You are within " + radius + " meters from this point").openPopup();
