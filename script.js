@@ -159,7 +159,7 @@ function onLocationFound(e) {
 	console.log(e)
 	e.latlng
 	if (!firstLocationFound){
-		map.setView(e.latlng,14);
+		map.setView(e.latlng,17);
 		firstLocationFound = true
 	}
 	//L.marker(e.latlng).addTo(map)
