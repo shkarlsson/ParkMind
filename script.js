@@ -123,6 +123,9 @@ function updateInfoBox(text){
 	else {
 		console.log('NOT (text.length == 0)')
 		$('#info-box').removeClass('invisible')
+		textWidthStringWithPx = (text.length*(-3)+4.4).toString() + 'px'
+		console.log(textWidthStringWithPx)
+		$('#info-box').css({marginLeft:textWidthStringWithPx})
 		$('#info-box').html('<strong>' + text + '</strong>')
 	}
 }
