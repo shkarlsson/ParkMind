@@ -158,8 +158,7 @@ function onLocationFound(e) {
 	console.log('running onLocationFound(e)')
 	console.log(e)
 	if (!firstLocationFound){
-		map.panTo([e.coords.latitude, e.coords.longitude])
-		map.setZoom(14);
+		map.setView([e.coords.latitude, e.coords.longitude],14);
 		firstLocationFound = true
 	}
 	//L.marker(e.latlng).addTo(map)
