@@ -124,6 +124,7 @@ function updateInfoBox(text){
 		console.log('NOT (text.length == 0)')
 		$('#info-box').removeClass('invisible')
 		htmlString = '<strong>' + text + '</strong>'
+		console.log(htmlString)
 		$('#info-box').html(htmlString)
 	}
 }
