@@ -114,10 +114,20 @@ function disableSubmitFields() {
 	$('#bottom-floater').hide()
 }
 
+function updateInfoBox(text){
+	if (text.length == 0){
+		$('#info-box').addClass('invisible')	
+	}
+	else {
+		$('#info-box').removeClass('invisible')
+		$('#info-box').html('<strong>' + text + '</strong>')
+	}
+}
 
 $(document).ready(function() {
-	$('#info-splash').removeClass('invisible')
-	$('#info-splash').html('<strong>Loading lots of data...</strong>')
+	updateInfoBox('Loading lots of data...')
+	//$('#info-box').removeClass('invisible')
+	//$('#info-box').html('<strong>Loading lots of data...</strong>')
 
 	$('#add-button').click(function() {
 		//alert("button pressed");
@@ -348,15 +358,18 @@ function withinViewAndNotInMap(feature) {
 function tooZoomedStatusChange() {
 	if (map.getZoom() < minZoomToLoadFeatures) {
 		if (!('dot' in currentLocation)){
-			$('#info-splash').removeClass('invisible')
-			$('#info-splash').html('<strong>Allow location access to see and zoom to your location (or just zoom there manually).</strong>')
+			updateInfoBox('Allow location access to see and zoom to your location (or just zoom there manually).')
+			//$('#info-box').removeClass('invisible')
+			//$('#info-box').html('<strong>Allow location access to see and zoom to your location (or just zoom there manually).</strong>')
 		}
 		else {
-			$('#info-splash').removeClass('invisible')
-			$('#info-splash').html('<strong>Zoom in to load more parking data.</strong>')
+			updateInfoBox('Zoom in to load more parking data.')
+			//$('#info-box').removeClass('invisible')
+			//$('#info-box').html('<strong>Zoom in to load more parking data.</strong>')
 		}
 	}	else {
-		$('#info-splash').addClass('invisible')
+		updateInfoBox('')
+		//$('#info-box').addClass('invisible')
 	}
 }
 
@@ -511,8 +524,9 @@ function determineColorThroughML(f){
 
 function loadParkingLines() {
 	if (map.getZoom() >= minZoomToLoadFeatures){
-		$('#info-splash').removeClass('invisible')
-		$('#info-splash').html('<strong>Loading parking data...</strong>')
+		updateInfoBox('Loading parking data...')
+		//$('#info-box').removeClass('invisible')
+		//$('#info-box').html('<strong>Loading parking data...</strong>')
 		parkeringar = L.geoJson(globalValues, {
 			filter: function(feature, layer) {
 				return withinViewAndNotInMap(feature)
@@ -540,7 +554,8 @@ function loadParkingLines() {
 				}
 			}
 		}).addTo(map)
-		$('#info-splash').addClass('invisible')
+		updateInfoBox('')
+		//$('#info-box').addClass('invisible')
 	}
 }
 
