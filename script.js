@@ -132,6 +132,13 @@ $(document).ready(function() {
 	updateInfoBox('Zoom in to load parking data.')
 	//$('#info-box').removeClass('invisible')
 	//$('#info-box').html('<strong>Loading lots of data...</strong>')
+	try {
+		navigator.geolocation.watchPosition(onLocationFound)
+	} catch (evt){
+		console.log(evt)
+		console.log("No geolocation given...")
+		//$('[name="SenderLocation"]').val('NotAvailable')
+	}
 
 	$('#add-button').click(function() {
 		//alert("button pressed");
@@ -283,16 +290,6 @@ function jsSubmitForm(e) {
 	clearActiveSelectedParking()
 	return false;
 }
-
-
-try {
-	navigator.geolocation.watchPosition(onLocationFound)
-} catch (evt){
-	console.log(evt)
-	console.log("No geolocation given...")
-	//$('[name="SenderLocation"]').val('NotAvailable')
-}
-
 
 
 
