@@ -129,7 +129,7 @@ function updateInfoBox(text){
 }
 
 $(document).ready(function() {
-	updateInfoBox('Loading lots of data...')
+	updateInfoBox('Allow location access to see and zoom to your location (or just zoom there manually).')
 	//$('#info-box').removeClass('invisible')
 	//$('#info-box').html('<strong>Loading lots of data...</strong>')
 
