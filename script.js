@@ -363,7 +363,7 @@ function checkZoomAndUserLocAndHeavyDataLoaded() {
 		}
 		return true
 	} else {
-		if !(heavyDataLoaded) {
+		if (!heavyDataLoaded) {
 			updateInfoBox('Loading lots of data...')
 			return true
 		}
