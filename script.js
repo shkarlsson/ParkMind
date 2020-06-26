@@ -157,7 +157,7 @@ $(document).keyup(function(e) {
 function onLocationFound(e) {
 	console.log('running onLocationFound(e)')
 	console.log(e)
-	e.latlng
+	e.latlng = [e.coords.latitude, e.coords.longitude];
 	if (!firstLocationFound){
 		map.setView(e.latlng,16);
 		firstLocationFound = true
