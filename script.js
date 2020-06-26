@@ -59,6 +59,7 @@ var globalValues, clickArea, parkeringar, aktivParkering, referefenceMidpoints, 
 var shownFIDs = []
 var currentLocation = {}
 var minZoomToLoadFeatures = 16
+var firstLocationFound = false
 
 function getDistanceFromLatLon(lat1, lon1, lat2, lon2) {
 	var p = 0.017453292519943295;    // Math.PI / 180
@@ -152,13 +153,13 @@ $(document).keyup(function(e) {
 
 	}
 });
-function onFirstLocationFound(e){
-	map.panTo([e.coords.latitude, e.coords.longitude])
-}
 
 function onLocationFound(e) {
 	console.log('running onLocationFound(e)')
 	console.log(e)
+	if (!firstLocationFound){
+		map.panTo([e.coords.latitude, e.coords.longitude])
+	}
 	//L.marker(e.latlng).addTo(map)
 	//	.bindPopup("You are within " + radius + " meters from this point").openPopup();
 	e.latlng = [e.coords.latitude, e.coords.longitude];
@@ -294,7 +295,6 @@ function jsSubmitForm(e) {
 
 
 try {
-	navigator.geolocation.getCurrentPosition(onFirstLocationFound)
 	navigator.geolocation.watchPosition(onLocationFound)
 } catch (evt){
 	console.log(evt)
