@@ -129,7 +129,7 @@ function updateInfoBox(text){
 }
 
 $(document).ready(function() {
-	updateInfoBox('Zoom in to load more data.')
+	updateInfoBox('Zoom in to load parking data.')
 	//$('#info-box').removeClass('invisible')
 	//$('#info-box').html('<strong>Loading lots of data...</strong>')
 
@@ -556,7 +556,11 @@ function loadParkingLines() {
 					}
 				}
 			}).addTo(map)
-			updateInfoBox('')
+			if (shownFIDs.length == 0){
+				updateInfoBox("Sorry. There's no data here...")
+			} else{
+				updateInfoBox('')
+			}
 		}, 10);
 		//$('#info-box').removeClass('invisible')
 		//$('#info-box').html('<strong>Loading parking data...</strong>')
