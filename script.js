@@ -357,7 +357,11 @@ function checkZoomAndUserLocAndHeavyDataLoaded() {
 			//$('#info-box').removeClass('invisible')
 			//$('#info-box').html('<strong>Zoom in to load more parking data.</strong>')
 		}*/
-		updateInfoBox('Zoom in to load more parking data.')
+		if (shownFIDs.length > 0){
+			updateInfoBox('Zoom in to load more parking data.')
+		} else{
+			updateInfoBox('Zoom in to load parking data.')
+		}
 		return true
 	} else {
 		if (!heavyDataLoaded) {
