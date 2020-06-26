@@ -116,6 +116,9 @@ function disableSubmitFields() {
 
 
 $(document).ready(function() {
+	$('#info-splash').removeClass('invisible')
+	$('#info-splash').html('<strong>Loading lots of data...</strong>')
+
 	$('#add-button').click(function() {
 		//alert("button pressed");
 		console.log(currentLocation.dot)
@@ -346,7 +349,7 @@ function tooZoomedStatusChange() {
 	if (map.getZoom() < minZoomToLoadFeatures) {
 		if (!('dot' in currentLocation)){
 			$('#info-splash').removeClass('invisible')
-			$('#info-splash').html('<strong>Allow location sharing to see and zoom to your location.</strong>')
+			$('#info-splash').html('<strong>Allow location access to see and zoom to your location (or just zoom there manually).</strong>')
 		}
 		else {
 			$('#info-splash').removeClass('invisible')
