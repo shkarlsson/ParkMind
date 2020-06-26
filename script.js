@@ -60,6 +60,7 @@ var shownFIDs = []
 var currentLocation = {}
 var minZoomToLoadFeatures = 16
 var firstLocationFound = false
+var heavyDataLoaded = false
 
 function getDistanceFromLatLon(lat1, lon1, lat2, lon2) {
 	var p = 0.017453292519943295;    // Math.PI / 180
@@ -159,6 +160,7 @@ function onLocationFound(e) {
 	console.log(e)
 	e.latlng = [e.coords.latitude, e.coords.longitude];
 	if (!firstLocationFound){
+		updateInfoBox('Figuring out parking availability...')
 		map.setView(e.latlng,17);
 		firstLocationFound = true
 	}
@@ -347,7 +349,7 @@ function withinViewAndNotInMap(feature) {
 	return false
 }
 
-function tooZoomedStatusChange() {
+function checkZoomAndUserLocAndHeavyDataLoaded() {
 	if (map.getZoom() < minZoomToLoadFeatures) {
 		if (!('dot' in currentLocation)){
 			updateInfoBox('Allow location access to see and zoom to your location (or just zoom there manually).')
@@ -360,9 +362,15 @@ function tooZoomedStatusChange() {
 			//$('#info-box').html('<strong>Zoom in to load more parking data.</strong>')
 		}
 		return true
-	}	else {
-		updateInfoBox('')
-		return false
+	} else {
+		if !(heavyDataLoaded) {
+			updateInfoBox('Loading lots of data...')
+			return true
+		}
+		else {
+			updateInfoBox('')
+			return false
+		}
 		//$('#info-box').addClass('invisible')
 	}
 }
@@ -516,8 +524,7 @@ function determineColorThroughML(f){
 }
 
 function loadParkingLines() {
-	if (!tooZoomedStatusChange()){
-		updateInfoBox('Figuring out parking availability...')
+	if (!checkZoomAndUserLocAndHeavyDataLoaded()){
 		setTimeout(function(){ //Don't know why, but this code runs before updateInfoBox without setTimeout().
 			parkeringar = L.geoJson(globalValues, {
 				filter: function(feature, layer) {
@@ -628,6 +635,7 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData,normali
 	console.log(targetColumns)
 	console.log(normalizedDatabase)
 	console.log(parkingWithOsmData)
+	heavyDataLoaded = true
 
 	loadParkingLines()
 
