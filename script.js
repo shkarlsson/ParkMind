@@ -157,13 +157,14 @@ $(document).keyup(function(e) {
 function onLocationFound(e) {
 	console.log('running onLocationFound(e)')
 	console.log(e)
+	e.latlng
 	if (!firstLocationFound){
-		map.setView([e.coords.latitude, e.coords.longitude],14);
+		map.setView(e.latlng,14);
 		firstLocationFound = true
 	}
 	//L.marker(e.latlng).addTo(map)
 	//	.bindPopup("You are within " + radius + " meters from this point").openPopup();
-	e.latlng = [e.coords.latitude, e.coords.longitude];
+
 
 	if (currentLocation.dot) {
 		map.removeLayer(currentLocation.dot)
