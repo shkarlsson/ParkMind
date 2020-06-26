@@ -159,6 +159,7 @@ function onLocationFound(e) {
 	console.log(e)
 	if (!firstLocationFound){
 		map.panTo([e.coords.latitude, e.coords.longitude])
+		firstLocationFound = true
 	}
 	//L.marker(e.latlng).addTo(map)
 	//	.bindPopup("You are within " + radius + " meters from this point").openPopup();
