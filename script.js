@@ -129,7 +129,7 @@ function updateInfoBox(text){
 }
 
 $(document).ready(function() {
-	updateInfoBox('Allow location access to zoom to your location (or just zoom there manually).')
+	updateInfoBox('Head over to your location.')
 	//$('#info-box').removeClass('invisible')
 	//$('#info-box').html('<strong>Loading lots of data...</strong>')
 
@@ -351,7 +351,7 @@ function withinViewAndNotInMap(feature) {
 function checkZoomAndUserLocAndHeavyDataLoaded() {
 	if (map.getZoom() < minZoomToLoadFeatures) {
 		if (!('dot' in currentLocation)){
-			updateInfoBox('Allow location access to see and zoom to your location (or just zoom there manually).')
+			updateInfoBox('Head over to your location.')
 			//$('#info-box').removeClass('invisible')
 			//$('#info-box').html('<strong>Allow location access to see and zoom to your location (or just zoom there manually).</strong>')
 		}
