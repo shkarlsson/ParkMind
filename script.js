@@ -528,36 +528,38 @@ function determineColorThroughML(f){
 function loadParkingLines() {
 	if (!tooZoomedStatusChange()){
 		updateInfoBox('Loading parking data...')
+		setTimeout(function(){ //Don't know why, but this code runs before updateInfoBox without setTimeout().
+			parkeringar = L.geoJson(globalValues, {
+				filter: function(feature, layer) {
+					return withinViewAndNotInMap(feature)
+				},
+				style: function(feature,layer) {
+					return {
+						weight: 8,
+						color: determineColorThroughML(feature),
+						lineCap: 'butt',
+						opacity: 0.7,
+					}
+				}
+			}).addTo(map)
+			clickArea = L.geoJson(globalValues, {
+				onEachFeature: onEachFeature,
+				filter: function(feature, layer) {
+					return shownFIDs.indexOf(feature.properties.FID) > -1
+				},
+				style: function(params) {
+					return {
+						weight: 20,
+						color: colors.blue100,
+						lineCap: 'butt',
+						opacity: 0.0,
+					}
+				}
+			}).addTo(map)
+			updateInfoBox('')
+		}, 10);
 		//$('#info-box').removeClass('invisible')
 		//$('#info-box').html('<strong>Loading parking data...</strong>')
-		parkeringar = L.geoJson(globalValues, {
-			filter: function(feature, layer) {
-				return withinViewAndNotInMap(feature)
-			},
-			style: function(feature,layer) {
-				return {
-					weight: 8,
-					color: determineColorThroughML(feature),
-					lineCap: 'butt',
-					opacity: 0.7,
-				}
-			}
-		}).addTo(map)
-		clickArea = L.geoJson(globalValues, {
-			onEachFeature: onEachFeature,
-			filter: function(feature, layer) {
-				return shownFIDs.indexOf(feature.properties.FID) > -1
-			},
-			style: function(params) {
-				return {
-					weight: 20,
-					color: colors.blue100,
-					lineCap: 'butt',
-					opacity: 0.0,
-				}
-			}
-		}).addTo(map)
-		//updateInfoBox('')
 		//$('#info-box').addClass('invisible')
 	}
 }
