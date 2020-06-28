@@ -113,12 +113,12 @@ map.addControl(new goToPositionButton());
 function disableSubmitFields() {
 	$('.form-control').attr('disabled', true)
 	$('#submit-button').attr('disabled', true)
-	$('#bottom-floater').hide()
+	$('#gform').hide()
 }
 
 function updateInfoBox(text){
 	if (text.length == 0){
-		$('#info-box').addClass('invisible')	
+		$('#info-box').addClass('invisible')
 	}
 	else {
 		$('#info-box').removeClass('invisible')
@@ -234,7 +234,7 @@ function clearActiveSelectedParking() {
 	$('[name="FeatureId"]').val('')
 	disableSubmitFields()
 		//$('.form-control').attr('disabled', false)
-		//$('#bottom-floater').addClass('invisible')
+		//$('#gform').addClass('invisible')
 }
 
 function clearFormFields() {
@@ -290,9 +290,6 @@ function jsSubmitForm(e) {
 	clearActiveSelectedParking()
 	return false;
 }
-
-
-
 
 map.on({
 	click: function(e) {
@@ -391,7 +388,7 @@ function onEachFeature(feature, layer) {
 			}
 			$('[name="FeatureId"]').val(feature.properties.FID)
 			$('.form-control').attr('disabled', false)
-			$('#bottom-floater').show()
+			$('#gform').show()
 			
 			aktivParkering = L.geoJson(e.sourceTarget.feature, {
 				//onEachFeature: onEachFeature,
@@ -647,7 +644,7 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData,normali
 	loadParkingLines()
 
 	var legend = L.control({
-		position: 'topleft',
+		position: 'bottomright',
 		collapsed: true
 	});
 	
@@ -669,7 +666,7 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData,normali
 		return div;
 	};
 	
-	legend.addTo(map); //Uncomment to add
+	//legend.addTo(map); //Uncomment to add
 	disableSubmitFields()
 });
 
