@@ -135,14 +135,14 @@ $(document).ready(function() {
 	try {
 		navigator.geolocation.watchPosition(onLocationFound)
 	} catch (evt){
-		console.log(evt)
+		//console.log(evt)
 		console.log("No geolocation given...")
 		//$('[name="SenderLocation"]').val('NotAvailable')
 	}
 
 	$('#add-button').click(function() {
 		//alert("button pressed");
-		console.log(currentLocation.dot)
+		//console.log(currentLocation.dot)
 		map.panTo(currentLocation.dot._latlng)
 	});
 });
@@ -390,7 +390,6 @@ function onEachFeature(feature, layer) {
 				clearActiveSelectedParking()
 			}
 			$('[name="FeatureId"]').val(feature.properties.FID)
-			console.log(feature)
 			$('.form-control').attr('disabled', false)
 			$('#bottom-floater').show()
 			
@@ -446,9 +445,9 @@ function getGeojsonCenter(f){
 function determineColorThroughML(f){
 	let X = []
 	var la, lo
-
+	
+	//console.log(f.properties.FID)
 	//Below used for quickly (only once) finding the right row for osm data tied to parking locations. It's split up because the geojson file got too large when the info was contained there.
-	console.log(f.properties.FID)
 	for (rowNo in parkingWithOsmData){
 		if (f.properties.FID == parkingWithOsmData[rowNo][0]){
 			break
@@ -670,10 +669,9 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData,normali
 		return div;
 	};
 	
-	//legend.addTo(map); //Uncomment to add
+	legend.addTo(map); //Uncomment to add
 	disableSubmitFields()
 });
-
 
 //Lägg in analytics
 //Fixa legend igen
