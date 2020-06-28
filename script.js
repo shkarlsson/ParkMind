@@ -122,16 +122,23 @@ function updateInfoBox(text){
 	}
 	else {
 		$('#info-box').removeClass('invisible')
-		textWidthStringWithPx = (text.length*(-3.03)+4.4).toString() + 'px'
+		textWidthStringWithPx = (text.length*(-3.03)-8).toString() + 'px'
 		$('#info-box').css({marginLeft:textWidthStringWithPx})
 		$('#info-box').html('<strong>' + text + '</strong>')
 	}
 }
 
 $(document).ready(function() {
-	updateInfoBox('Allow location access to zoom to your location (or just zoom there manually).')
+	updateInfoBox('Zoom in to load parking data.')
 	//$('#info-box').removeClass('invisible')
 	//$('#info-box').html('<strong>Loading lots of data...</strong>')
+	try {
+		navigator.geolocation.watchPosition(onLocationFound)
+	} catch (evt){
+		console.log(evt)
+		console.log("No geolocation given...")
+		//$('[name="SenderLocation"]').val('NotAvailable')
+	}
 
 	$('#add-button').click(function() {
 		//alert("button pressed");
@@ -285,16 +292,6 @@ function jsSubmitForm(e) {
 }
 
 
-try {
-	navigator.geolocation.watchPosition(onLocationFound)
-} catch (evt){
-	console.log(evt)
-	console.log("No geolocation given...")
-	//$('[name="SenderLocation"]').val('NotAvailable')
-}
-
-
-
 
 
 map.on({
@@ -350,8 +347,8 @@ function withinViewAndNotInMap(feature) {
 
 function checkZoomAndUserLocAndHeavyDataLoaded() {
 	if (map.getZoom() < minZoomToLoadFeatures) {
-		if (!('dot' in currentLocation)){
-			updateInfoBox('Allow location access to see and zoom to your location (or just zoom there manually).')
+		/*if (!('dot' in currentLocation)){
+			updateInfoBox('Head over to your location.')
 			//$('#info-box').removeClass('invisible')
 			//$('#info-box').html('<strong>Allow location access to see and zoom to your location (or just zoom there manually).</strong>')
 		}
@@ -359,6 +356,11 @@ function checkZoomAndUserLocAndHeavyDataLoaded() {
 			updateInfoBox('Zoom in to load more parking data.')
 			//$('#info-box').removeClass('invisible')
 			//$('#info-box').html('<strong>Zoom in to load more parking data.</strong>')
+		}*/
+		if (shownFIDs.length > 0){
+			updateInfoBox('Zoom in to load more parking data.')
+		} else{
+			updateInfoBox('Zoom in to load parking data.')
 		}
 		return true
 	} else {
@@ -555,8 +557,12 @@ function loadParkingLines() {
 					}
 				}
 			}).addTo(map)
-			updateInfoBox('')
-		}, 0);
+			if (shownFIDs.length == 0){
+				updateInfoBox("Sorry. There's no data here...")
+			} else{
+				updateInfoBox('')
+			}
+		}, 10);
 		//$('#info-box').removeClass('invisible')
 		//$('#info-box').html('<strong>Loading parking data...</strong>')
 		//$('#info-box').addClass('invisible')
