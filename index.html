@@ -68,6 +68,14 @@
 				padding: 6px 0px;
 				border-radius: 0px;
 			}
+			.input-group-prepend {
+				width : 112px; 
+			}
+
+			.input-group-prepend text {
+				width: 100%;
+				overflow: hidden
+			}
 		</style>
 		
 	</head>
@@ -79,31 +87,31 @@
 					<form js_action="https://script.google.com/macros/s/AKfycbyAnHcvUXvJAik62zjkAo8j-cTb9JE4q0AFIxSg/exec" id="gform" class="form form-inline" name="observations_form">
 						<div class="input-group input-group-sm col-12 col-sm-4 col-lg-2">
 							<div class="input-group-prepend">
-								<span class="input-group-text">Parked Cars</span>
+								<span class="input-group-text text-right">Parked Cars</span>
 							</div>
 							<input type="number" placeholder="" name="ParkedCars" class="form-control" value="">
 						</div>
 						<div class="input-group input-group-sm col-12 col-sm-4 col-lg-2">
 							<div class="input-group-prepend">
-								<span class="input-group-text">Free Spots</span>
+								<span class="input-group-text text-right">Free Spots</span>
 							</div>
 							<input type="number" placeholder="" name="FreeSpots" class="form-control" value="">
 						</div>
 						<div class="input-group input-group-sm col-12 col-sm-4 col-lg-2">
 							<div class="input-group-prepend">
-								<span class="input-group-text">Total Spots</span>
+								<span class="input-group-text text-right">Total Spots</span>
 							</div>
 							<input type="number" placeholder="" name="TotalSpots" class="form-control" value="">
 						</div>
 						<div class="input-group input-group-sm col-12 col-sm-4 col-lg-2">
 							<div class="input-group-prepend">
-								<span class="input-group-text">Illegal parkings</span>
+								<span class="input-group-text text-right">Illegal parkings</span>
 							</div>
 							<input type="number" placeholder="" name="IllegalParkings" class="form-control" value="">
 						</div>
 						<div class="input-group input-group-sm col-12 col-sm-4 col-lg-2">
 							<div class="input-group-prepend">
-								<span class="input-group-text">Comments</span>
+								<span class="input-group-text text-right">Comments</span>
 							</div>
 							<input type="text" placeholder="" name="Comments" class="form-control" value="">
 						</div>
@@ -113,11 +121,11 @@
 						</div>
 						
 						<!--<div class="input-group-prepend input-group input-group-sm col-12 col-sm-4 col-lg-2">
-							<div class="input-group-text">
+							<div class="input-group-text text-right">
 								<input type="checkbox" aria-label="Advanced">
 							</div>
 							<div class="input-group-append">
-								<span class="input-group-text">Advanced</span>
+								<span class="input-group-text text-right">Advanced</span>
 							</div>
 						</div>-->
 					</form>
