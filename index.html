@@ -74,7 +74,14 @@
 
 			.input-group-prepend text {
 				width: 100%;
-				overflow: hidden
+				overflow: hidden;
+			}
+			hr {
+				display: inline-table;
+				height: 7px;
+				width: 28px;
+				margin-left: 20px;
+				margin-righT: 4px;
 			}
 		</style>
 		
@@ -84,6 +91,12 @@
 			<div id='map'></div>
 			<div id='bottom-floater' class='info fixed-bottom'>
 				<div class="d-inline-block">
+					<div id="legend" class="">
+						<h5>Parking Availability Probability</h5>
+						<hr style="background-color:#e6194B">Low
+						<hr style="background-color:#ffe119">Medium
+						<hr style="background-color:#3cb44b">High
+					</div>
 					<form js_action="https://script.google.com/macros/s/AKfycbyAnHcvUXvJAik62zjkAo8j-cTb9JE4q0AFIxSg/exec" id="gform" class="form form-inline invisible" name="observations_form">
 						<div class="input-group input-group-sm mb-1 col-12 col-sm-4 col-lg-2">
 							<div class="input-group-prepend">

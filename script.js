@@ -113,7 +113,8 @@ map.addControl(new goToPositionButton());
 function disableSubmitFields() {
 	$('.form-control').attr('disabled', true)
 	$('#submit-button').attr('disabled', true)
-	$('#gform').hide()
+	$('#gform').hide().css('height', '0px');
+	$('#legend').show().css('height', '');
 }
 
 function updateInfoBox(text){
@@ -388,7 +389,8 @@ function onEachFeature(feature, layer) {
 			}
 			$('[name="FeatureId"]').val(feature.properties.FID)
 			$('.form-control').attr('disabled', false)
-			$('#gform').show()
+			$('#gform').show().css('height', '');
+			$('#legend').hide().css('height', '0px');
 			
 			aktivParkering = L.geoJson(e.sourceTarget.feature, {
 				//onEachFeature: onEachFeature,
