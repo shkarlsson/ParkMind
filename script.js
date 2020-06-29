@@ -102,8 +102,8 @@ var goToPositionButton = L.Control.extend({
 		var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom btn btn-secondary btn-sm');
 		container.appendChild(L.DomUtil.create('span', 'fa fa-location-arrow'))
 		container.onclick = function() {
-			var targetPoint = map.project(currentLocation.dot._latlng, map.getZoom()).subtract([220, -240])
-			var targetLatLng = map.unproject(targetPoint, map.getZoom());
+			var targetPoint = map.project(currentLocation.dot._latlng, map.getZoom())
+			var targetLatLng = map.unproject(targetPoint, map.getZoom()).subtract([220, -240]);
 			map.panTo(targetLatLng)
 			//map.panTo(currentLocation.dot._latlng)
 		}
@@ -148,8 +148,8 @@ $(document).ready(function() {
 	$('#add-button').click(function() {
 		//alert("button pressed");
 		//console.log(currentLocation.dot)
-		var targetPoint = map.project(currentLocation.dot._latlng, map.getZoom()).subtract([220, -240])
-		var targetLatLng = map.unproject(targetPoint, map.getZoom());
+		var targetPoint = map.project(currentLocation.dot._latlng, map.getZoom())
+		var targetLatLng = map.unproject(targetPoint, map.getZoom()).subtract([220, -240]);
 		map.panTo(targetLatLng)
 		//map.panTo(currentLocation.dot._latlng)
 	});
