@@ -102,7 +102,9 @@ var goToPositionButton = L.Control.extend({
 		var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom btn btn-secondary btn-sm');
 		container.appendChild(L.DomUtil.create('span', 'fa fa-location-arrow'))
 		container.onclick = function() {
-			map.panTo(currentLocation.dot._latlng)
+			var targetPoint = map.project(currentLocation.dot._latlng, map.getZoom()).subtract([0, -240])
+			var targetLatLng = map.unproject(targetPoint, map.getZoom());
+			map.panTo(targetLatLng)
 		}
 		return container;
 	}
@@ -669,12 +671,10 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData,normali
 		return div;
 	};
 	
-	//legend.addTo(map); //Uncomment to add
-	disableSubmitFields()
+	//disableSubmitFields()
 });
 
 //Lägg in analytics
-//Fixa legend igen
 //Fixa totaler i legend
 //Föreslå ny plats-funktion
 
