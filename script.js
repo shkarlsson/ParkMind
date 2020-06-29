@@ -152,6 +152,8 @@ $(document).ready(function() {
 		//alert("button pressed");
 		//console.log(currentLocation.dot)
 		map.panTo(currentLocation.dot._latlng)
+		var offset = map.getSize().x*0.20;
+		map.panBy(new L.Point(-offset, 0), {animate: false});
 	});
 });
 
@@ -411,6 +413,8 @@ function onEachFeature(feature, layer) {
 				}
 			}).addTo(map).bringToBack()
 			map.panTo(aktivParkering.getBounds().getCenter())
+			var offset = map.getSize().x*0.20;
+			map.panBy(new L.Point(-offset, 0), {animate: false});
 		}
 	});
 }
