@@ -130,6 +130,7 @@ function updateInfoBox(text){
 }
 
 $(document).ready(function() {
+	disableSubmitFields()
 	updateInfoBox('Zoom in to load parking data.')
 	//$('#info-box').removeClass('invisible')
 	//$('#info-box').html('<strong>Loading lots of data...</strong>')
