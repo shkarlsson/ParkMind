@@ -102,13 +102,7 @@ var goToPositionButton = L.Control.extend({
 		var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom btn btn-secondary btn-sm');
 		container.appendChild(L.DomUtil.create('span', 'fa fa-location-arrow'))
 		container.onclick = function() {
-			//var targetPoint = map.project(currentLocation.dot._latlng, map.getZoom())
-			//var targetLatLng = map.unproject(targetPoint, map.getZoom()).subtract([220, -240]);
-			//map.panTo(targetLatLng)
-
 			map.panTo(currentLocation.dot._latlng)
-			var offset = map.getSize().x*0.20;
-			map.panBy(new L.Point(-offset, 0), {animate: false});
 		}
 		return container;
 	}
@@ -152,8 +146,6 @@ $(document).ready(function() {
 		//alert("button pressed");
 		//console.log(currentLocation.dot)
 		map.panTo(currentLocation.dot._latlng)
-		var offset = map.getSize().x*0.20;
-		map.panBy(new L.Point(-offset, 0), {animate: false});
 	});
 });
 
@@ -412,10 +404,7 @@ function onEachFeature(feature, layer) {
 					}
 				}
 			}).addTo(map).bringToBack()
-			map.panTo(aktivParkering.getBounds().getCenter(),{animate: false})
-			var offset = map.getSize().x*0.70;
-			console.log(offset)
-			map.panBy(new L.Point(-offset, 0), {animate: false});
+			map.panTo(aktivParkering.getBounds().getCenter())
 		}
 	});
 }
