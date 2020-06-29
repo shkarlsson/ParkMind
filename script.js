@@ -413,7 +413,8 @@ function onEachFeature(feature, layer) {
 				}
 			}).addTo(map).bringToBack()
 			map.panTo(aktivParkering.getBounds().getCenter())
-			var offset = map.getSize().x*0.20;
+			var offset = map.getSize().x*0.70;
+			console.log(offset)
 			map.panBy(new L.Point(-offset, 0), {animate: false});
 		}
 	});
