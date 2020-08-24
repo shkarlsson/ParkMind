@@ -539,6 +539,7 @@ function loadParkingLines() {
 						color: determineColorThroughML(feature),
 						lineCap: 'butt',
 						opacity: 0.7,
+						smoothFactor: 3
 					}
 				}
 			}).addTo(map)
@@ -672,6 +673,7 @@ Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData,normali
 	//disableSubmitFields()
 });
 
+//Fixa så att den setView:ar när den får GPS-data igen.
 //Lägg in analytics
 //Fixa totaler i legend
 //Föreslå ny plats-funktion
