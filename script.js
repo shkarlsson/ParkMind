@@ -479,7 +479,7 @@ function determineColorThroughML(f){
 		}
 	}
 	console.log(parkingWithOsmData[0])
-	console.log(('BuildingsWithin25m' in parkingWithOsmData[0]))
+	console.log(parkingWithOsmData[0].indexOf('BuildingsWithin25m'))
 	let dt = new Date()
 	let t = (((dt.getSeconds() / 60 + dt.getMinutes()) / 60) + dt.getHours()) / 24
 	let d = ((t + dt.getDate()) / 31 + dt.getMonth()) / 12
@@ -492,12 +492,14 @@ function determineColorThroughML(f){
 	timeFeatures = {
 		timestamp: Date.now(),
 		sin_time: Math.sin(t),
-		cis_time: Math.cos(t),
+		cos_time: Math.cos(t),
 		sin_date: Math.sin(d),
 		cos_date: Math.cos(d),
 		sin_wkd: Math.sin(w),
 		cos_wkd: Math.cos(w),
 	}
+
+	console.log(timeFeatures)
 
 	c = getGeojsonCenter(f)
 	for (var i in scaler['name']){
@@ -515,7 +517,7 @@ function determineColorThroughML(f){
 		else if (x in dataFromSheets){
 			X.push(dataFromSheets[x])
 		}
-		else if (x in parkingWithOsmData[0]){
+		else if (parkingWithOsmData[0].indexOf(x) > -1){
 			colNo = parkingWithOsmData[0].indexOf(x)
 			X.push(parkingWithOsmData[rowNo][colNo])
 		}
