@@ -472,13 +472,13 @@ function determineColorThroughML(f){
 	timeFeatures = {
 		dt: new Date(),
 		timestamp: Date.now(),
-		t = (((dt.getSeconds() / 60 + dt.getMinutes()) / 60) + dt.getHours()) / 24,
+		t: (((dt.getSeconds() / 60 + dt.getMinutes()) / 60) + dt.getHours()) / 24,
 		sin_time: Math.sin(t),
 		sin_time: Math.cos(t),
-		d = ((t + dt.getDate()) / 31 + dt.getMonth()) / 12,
+		d: ((t + dt.getDate()) / 31 + dt.getMonth()) / 12,
 		sin_date: Math.sin(d),
 		sin_date: Math.cos(d),
-		wkd = dt.getDay(),
+		wkd: dt.getDay(),
 		sin_wkd: Math.sin((t + wkd) / 7),
 		sin_wkd: Math.cos((t + wkd) / 7),
 	}
