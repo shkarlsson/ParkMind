@@ -517,9 +517,13 @@ function determineColorThroughML(f){
 
 	props = f.properties
 
-	if (props.FreeSpots >= 2){
+	randBlur = (1 - Math.random() * 2) * 0.1
+	print(randBlur)
+
+
+	if (props.FreeSpot + randBlur >= .8){
 		return colors.green99
-	} else if (props.FreeSpots >= 1){
+	} else if (props.FreeSpot + randBlur >= .2){
 		return colors.yellow100
 	} else {
 		return colors.red99
