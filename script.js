@@ -453,7 +453,26 @@ function determineColorThroughML(f){
 			break
 		}
 	}
+	console.log(parkingWithOsmData)
 
+	timeFeatures = {
+		s: new Date(),
+
+		
+	}
+	/*
+	def datetime2timefeatures(s):
+	if type(s) == str:
+		dt = datetime.strptime(s,'%Y-%m-%d %H.%M.%S')
+	elif type(s) in [float,int]:
+		dt = datetime.fromtimestamp(s)
+	u = time.mktime(dt.timetuple())
+	t = dt.time()
+	t = ((t.second / 60 + t.minute) / 60 + t.hour) / 24	
+	d = dt.date()
+	d = ((t + dt.day-1) / 31 + (dt.month-1)) / 12
+	return [float(u), sin(t), cos(t), sin(d), cos(d), sin(dt.weekday() / 6 + t), cos(dt.weekday() / 6 + t)]
+	*/
 	c = getGeojsonCenter(f)
 	for (var i in scaler['name']){
 		x = scaler['name'][i]
