@@ -468,19 +468,23 @@ function determineColorThroughML(f){
 		}
 	}
 	console.log(parkingWithOsmData)
+	let dt = new Date()
+	let t = (((dt.getSeconds() / 60 + dt.getMinutes()) / 60) + dt.getHours()) / 24
+	let d = ((t + dt.getDate()) / 31 + dt.getMonth()) / 12
+	let w = (t + dt.getDay()) / 7
+	console.log(dt)
+	console.log(t)
+	console.log(d)
+	console.log(w)
 
 	timeFeatures = {
-		dt: new Date(),
 		timestamp: Date.now(),
-		t: (((dt.getSeconds() / 60 + dt.getMinutes()) / 60) + dt.getHours()) / 24,
 		sin_time: Math.sin(t),
 		sin_time: Math.cos(t),
-		d: ((t + dt.getDate()) / 31 + dt.getMonth()) / 12,
 		sin_date: Math.sin(d),
 		sin_date: Math.cos(d),
-		wkd: dt.getDay(),
-		sin_wkd: Math.sin((t + wkd) / 7),
-		sin_wkd: Math.cos((t + wkd) / 7),
+		sin_wkd: Math.sin(w),
+		sin_wkd: Math.cos(w),
 	}
 
 	c = getGeojsonCenter(f)
