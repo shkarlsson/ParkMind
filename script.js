@@ -448,18 +448,7 @@ function determineColorThroughML(f){
 	
 	//console.log(f.properties.FID)
 	//Below used for quickly (only once) finding the right row for osm data tied to parking locations. It's split up because the geojson file got too large when the info was contained there.
-	for (rowNo in parkingWithOsmData){
-		if (f.properties.FID == parkingWithOsmData[rowNo][0]){
-			break
-		}
-	}
-	console.log(parkingWithOsmData)
 
-	timeFeatures = {
-		s: new Date(),
-
-		
-	}
 	/*
 	def datetime2timefeatures(s):
 	if type(s) == str:
@@ -473,6 +462,27 @@ function determineColorThroughML(f){
 	d = ((t + dt.day-1) / 31 + (dt.month-1)) / 12
 	return [float(u), sin(t), cos(t), sin(d), cos(d), sin(dt.weekday() / 6 + t), cos(dt.weekday() / 6 + t)]
 	*/
+	for (rowNo in parkingWithOsmData){
+		if (f.properties.FID == parkingWithOsmData[rowNo][0]){
+			break
+		}
+	}
+	console.log(parkingWithOsmData)
+
+	timeFeatures = {
+		dt: new Date(),
+		timestamp: Date.now(),
+		t = (((dt.getSeconds() / 60 + dt.getMinutes()) / 60) + dt.getHours()) / 24,
+		sin_time: Math.sin(t),
+		sin_time: Math.cos(t),
+		d = ((t + dt.getDate()) / 31 + dt.getMonth()) / 12,
+		sin_date: Math.sin(d),
+		sin_date: Math.cos(d),
+		wkd = dt.getDay(),
+		sin_wkd: Math.sin((t + wkd) / 7),
+		sin_wkd: Math.cos((t + wkd) / 7),
+	}
+
 	c = getGeojsonCenter(f)
 	for (var i in scaler['name']){
 		x = scaler['name'][i]
