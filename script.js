@@ -502,6 +502,11 @@ function determineColorThroughML(f){
 			colNo = parkingWithOsmData[0].indexOf(x)
 			X.push(parkingWithOsmData[rowNo][colNo])
 		}
+		else if (x in timeFeatures){
+			console.log(x)
+			console.log(timeFeatures[x])
+			X.push(timeFeatures[x])
+		}
 		else if (x in f.properties){
 			X.push(f.properties[x])
 		}
