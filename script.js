@@ -517,13 +517,11 @@ function determineColorThroughML(f){
 		else if (x in dataFromSheets){
 			X.push(dataFromSheets[x])
 		}
-		else if (parkingWithOsmData[0].indexOf(x) > -1){
+		else if (parkingWithOsmData[0].indexOf(x) > -1){ //Don't know why, but this works, not "x i parkeringWith...".
 			colNo = parkingWithOsmData[0].indexOf(x)
 			X.push(parkingWithOsmData[rowNo][colNo])
 		}
 		else if (x in timeFeatures){
-			console.log(x)
-			console.log(timeFeatures[x])
 			X.push(timeFeatures[x])
 		}
 		else if (x in f.properties){
