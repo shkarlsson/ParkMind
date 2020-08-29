@@ -478,16 +478,10 @@ function determineColorThroughML(f){
 			break
 		}
 	}
-	console.log(parkingWithOsmData[0])
-	console.log(parkingWithOsmData[0].indexOf('BuildingsWithin25m'))
 	let dt = new Date()
 	let t = (((dt.getSeconds() / 60 + dt.getMinutes()) / 60) + dt.getHours()) / 24
 	let d = ((t + dt.getDate()) / 31 + dt.getMonth()) / 12
 	let w = (t + getWkDayStartingWithMonday(dt)) / 7
-	console.log(dt)
-	console.log(t)
-	console.log(d)
-	console.log(w)
 
 	timeFeatures = {
 		timestamp: Date.now(),
@@ -499,12 +493,9 @@ function determineColorThroughML(f){
 		cos_wkd: Math.cos(w),
 	}
 
-	console.log(timeFeatures)
-
 	c = getGeojsonCenter(f)
 	for (var i in scaler['name']){
 		x = scaler['name'][i]
-		console.log(x)
 		if (x == 'FeatureLength') { //I need to do this because I can't send many leghts to google sheets.
 			X.push(getLengthOfParkering(f))
 		}
@@ -569,8 +560,6 @@ function determineColorThroughML(f){
 	props = f.properties
 
 	randBlur = (1 - Math.random() * 2) * 0.1
-	print(randBlur)
-
 
 	if (props.FreeSpot + randBlur >= .8){
 		return colors.green99
