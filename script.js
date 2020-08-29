@@ -442,6 +442,17 @@ function getGeojsonCenter(f){
 	return {'x':(xMax+xMin),'y':(yMax+yMin)} //For some really weird reason, I shouldn't divide with 2 to get the average between min an max. I don't understand how, but this works.
 }
 
+function getWkDayStartingWithMonday(dt){
+	w = dt.getDay()
+	if (w == 0) {
+		w = 6
+	}
+	else {
+		w -= 1
+	}
+	return w
+}
+
 function determineColorThroughML(f){
 	let X = []
 	var la, lo
@@ -467,11 +478,11 @@ function determineColorThroughML(f){
 			break
 		}
 	}
-	console.log(parkingWithOsmData)
+	console.log(parkingWithOsmData[0])
 	let dt = new Date()
 	let t = (((dt.getSeconds() / 60 + dt.getMinutes()) / 60) + dt.getHours()) / 24
 	let d = ((t + dt.getDate()) / 31 + dt.getMonth()) / 12
-	let w = (t + dt.getDay()) / 7
+	let w = (t + getWkDayStartingWithMonday(dt)) / 7
 	console.log(dt)
 	console.log(t)
 	console.log(d)
@@ -480,11 +491,11 @@ function determineColorThroughML(f){
 	timeFeatures = {
 		timestamp: Date.now(),
 		sin_time: Math.sin(t),
-		sin_time: Math.cos(t),
+		cis_time: Math.cos(t),
 		sin_date: Math.sin(d),
-		sin_date: Math.cos(d),
+		cos_date: Math.cos(d),
 		sin_wkd: Math.sin(w),
-		sin_wkd: Math.cos(w),
+		cos_wkd: Math.cos(w),
 	}
 
 	c = getGeojsonCenter(f)
