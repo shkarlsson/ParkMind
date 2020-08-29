@@ -460,19 +460,6 @@ function determineColorThroughML(f){
 	//console.log(f.properties.FID)
 	//Below used for quickly (only once) finding the right row for osm data tied to parking locations. It's split up because the geojson file got too large when the info was contained there.
 
-	/*
-	def datetime2timefeatures(s):
-	if type(s) == str:
-		dt = datetime.strptime(s,'%Y-%m-%d %H.%M.%S')
-	elif type(s) in [float,int]:
-		dt = datetime.fromtimestamp(s)
-	u = time.mktime(dt.timetuple())
-	t = dt.time()
-	t = ((t.second / 60 + t.minute) / 60 + t.hour) / 24	
-	d = dt.date()
-	d = ((t + dt.day-1) / 31 + (dt.month-1)) / 12
-	return [float(u), sin(t), cos(t), sin(d), cos(d), sin(dt.weekday() / 6 + t), cos(dt.weekday() / 6 + t)]
-	*/
 	for (rowNo in parkingWithOsmData){
 		if (f.properties.FID == parkingWithOsmData[rowNo][0]){
 			break
@@ -484,7 +471,7 @@ function determineColorThroughML(f){
 	let w = (t + getWkDayStartingWithMonday(dt)) / 7
 
 	timeFeatures = {
-		timestamp: Date.now(),
+		timestamp: Date.now()/1000,
 		sin_time: Math.sin(t),
 		cos_time: Math.cos(t),
 		sin_date: Math.sin(d),
