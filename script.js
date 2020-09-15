@@ -55,7 +55,7 @@ var uuid = document.cookie.split('=')[1]
 
 
 
-var globalValues, clickArea, parkeringar, aktivParkering, referefenceMidpoints, scaler, categoryColumns
+var clickArea, parkeringar, aktivParkering, referenceMidpoints, scaler
 var shownFIDs = []
 var currentLocation = {}
 var minZoomToLoadFeatures = 16
@@ -71,25 +71,47 @@ function getDistanceFromLatLon(lat1, lon1, lat2, lon2) {
 	return 12742000 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
 }
 
-var baseMaps = {
-	"Light": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVycmthcmxzb24iLCJhIjoiY2p1MW9td3ZpMDNrazQ0cGVmMDltc3EwaSJ9.0h6iBb8t7laIu-xP7YE4CQ', {
+const baseMaps = {
+	"Google Satellite": L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+		maxZoom: 20,
+		subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+	}),
+	"ArcGIS Satellite": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+		attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+		opacity: .8
+	}),
+	"Google Streets": L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+		maxZoom: 20,
+		subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+	}),
+	"Google Terrain": L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', {
+		maxZoom: 20,
+		subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+	}),
+	'OpenStreetMap B&W': L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
+		maxZoom: 18,
+		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+		opacity:.5
+	}),
+	'OpenStreetMap Color': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	}),
+	"MapBox Light": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVycmthcmxzb24iLCJhIjoiY2p1MW9td3ZpMDNrazQ0cGVmMDltc3EwaSJ9.0h6iBb8t7laIu-xP7YE4CQ', {
+	tileSize: 512,
+	zoomOffset: -1,
+	}),
+	"MapBox Normal": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVycmthcmxzb24iLCJhIjoiY2p1MW9td3ZpMDNrazQ0cGVmMDltc3EwaSJ9.0h6iBb8t7laIu-xP7YE4CQ', {
 		tileSize: 512,
 		zoomOffset: -1,
 	}),
-	"Normal": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVycmthcmxzb24iLCJhIjoiY2p1MW9td3ZpMDNrazQ0cGVmMDltc3EwaSJ9.0h6iBb8t7laIu-xP7YE4CQ', {
-		tileSize: 512,
-		zoomOffset: -1,
-	}),
-	"Satellit": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-		attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-	}),
-	"Mörk": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVycmthcmxzb24iLCJhIjoiY2p1MW9td3ZpMDNrazQ0cGVmMDltc3EwaSJ9.0h6iBb8t7laIu-xP7YE4CQ'),
+	"MapBox Dark": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVycmthcmxzb24iLCJhIjoiY2p1MW9td3ZpMDNrazQ0cGVmMDltc3EwaSJ9.0h6iBb8t7laIu-xP7YE4CQ'),
 }
 
 var map = L.map('map', {
 	center: [59.3274541, 18.0543566],
 	zoom: 11,
-	layers: [baseMaps['Light']],
+	layers: [baseMaps['OpenStreetMap B&W']],
 	zoomControl: false,
 })
 
@@ -172,9 +194,6 @@ function onLocationFound(e) {
 		map.setView(e.latlng,18);
 		firstLocationFound = true
 	}
-	//L.marker(e.latlng).addTo(map)
-	//	.bindPopup("You are within " + radius + " meters from this point").openPopup();
-
 
 	if (currentLocation.dot) {
 		map.removeLayer(currentLocation.dot)
@@ -225,8 +244,7 @@ var colors = {
 }
 
 //Add layers to top right menu
-L.control.layers(null, baseMaps, {
-	position: 'topleft'
+L.control.layers(baseMaps, null, {
 }).addTo(map)
 
 function clearActiveSelectedParking() {
@@ -302,7 +320,6 @@ map.on({
 	}
 })
 
-
 map.on('pm:create', e => {
 	console.log(e);
 	var geojsonToSheets = e.layer.toGeoJSON()
@@ -335,7 +352,7 @@ function withinViewAndNotInMap(feature) {
 	var ns2 = fgc[fgc.length - 1][1]
 	var ew2 = fgc[fgc.length - 1][0]
 
-	i = feature.properties.FID
+	i = feature.FID
 	if (((ew1 < e && ns1 < n && ew1 > w && ns1 > s) || (ew2 < e && ns2 < n && ew2 > w && ns2 > s)) && shownFIDs.indexOf(i) == -1) {
 		shownFIDs.push(i)
 		//console.log("Adding another feature to the map...")
@@ -346,16 +363,6 @@ function withinViewAndNotInMap(feature) {
 
 function checkZoomAndUserLocAndHeavyDataLoaded() {
 	if (map.getZoom() < minZoomToLoadFeatures) {
-		/*if (!('dot' in currentLocation)){
-			updateInfoBox('Head over to your location.')
-			//$('#info-box').removeClass('invisible')
-			//$('#info-box').html('<strong>Allow location access to see and zoom to your location (or just zoom there manually).</strong>')
-		}
-		else {
-			updateInfoBox('Zoom in to load more parking data.')
-			//$('#info-box').removeClass('invisible')
-			//$('#info-box').html('<strong>Zoom in to load more parking data.</strong>')
-		}*/
 		if (shownFIDs.length > 0){
 			updateInfoBox('Zoom in to load more parking data.')
 		} else{
@@ -388,11 +395,12 @@ function onEachFeature(feature, layer) {
 			if (aktivParkering) {
 				clearActiveSelectedParking()
 			}
-			$('[name="FeatureId"]').val(feature.properties.FID)
+			$('[name="FeatureId"]').val(feature.FID)
 			$('.form-control').attr('disabled', false)
 			$('#gform').show().css('height', '');
 			$('#legend').hide().css('height', '0px');
-			
+			console.log(allShownFeaturesData[feature.FID])
+
 			aktivParkering = L.geoJson(e.sourceTarget.feature, {
 				//onEachFeature: onEachFeature,
 				style: function(params) {
@@ -411,7 +419,7 @@ function onEachFeature(feature, layer) {
 
 function recolorThisFeature(fid) {
 	parkeringar.eachLayer(function(layer) {
-		if (layer.feature.properties.FID == fid) {
+		if (layer.feature.FID == fid) {
 			layer.setStyle({
 				color: 'red'
 			})
@@ -453,18 +461,20 @@ function getWkDayStartingWithMonday(dt){
 	return w
 }
 
+var allShownFeaturesData = {}
 function determineColorThroughML(f){
 	let X = []
 	var la, lo
-	
-	//console.log(f.properties.FID)
+	//console.log(f.FID)
 	//Below used for quickly (only once) finding the right row for osm data tied to parking locations. It's split up because the geojson file got too large when the info was contained there.
 
-	for (rowNo in parkingWithOsmData){
-		if (f.properties.FID == parkingWithOsmData[rowNo][0]){
+	//Finding the right row to get data from...
+	for (rowNo in fixedXData){
+		if (f.FID == fixedXData[rowNo][0]){
 			break
 		}
 	}
+
 	let dt = new Date()
 	let t = (((dt.getSeconds() / 60 + dt.getMinutes()) / 60) + dt.getHours()) / 24
 	let d = ((t + dt.getDate()) / 31 + dt.getMonth()) / 12
@@ -480,6 +490,7 @@ function determineColorThroughML(f){
 		cos_wkd: Math.cos(w),
 	}
 
+	allShownFeaturesData[f.FID] = {}
 	c = getGeojsonCenter(f)
 	for (var i in scaler['name']){
 		x = scaler['name'][i]
@@ -495,19 +506,17 @@ function determineColorThroughML(f){
 		else if (x in dataFromSheets){
 			X.push(dataFromSheets[x])
 		}
-		else if (parkingWithOsmData[0].indexOf(x) > -1){ //Don't know why, but this works, not "x i parkeringWith...".
-			colNo = parkingWithOsmData[0].indexOf(x)
-			X.push(parkingWithOsmData[rowNo][colNo])
+		else if (fixedXData[0].indexOf(x) > -1){ //Don't know why, but this works, not "x i parkeringWith...".
+			colNo = fixedXData[0].indexOf(x)
+			xVal = parseInt(fixedXData[rowNo][colNo])
+ 			X.push(xVal)
 		}
 		else if (x in timeFeatures){
 			X.push(timeFeatures[x])
 		}
-		else if (x in f.properties){
-			X.push(f.properties[x])
-		}
-		else if (x in referefenceMidpoints){
-			la = String(referefenceMidpoints[x]).split(',')[0]
-			lo = String(referefenceMidpoints[x]).split(',')[1]
+		else if (x in referenceMidpoints){
+			la = String(referenceMidpoints[x]).split(',')[0]
+			lo = String(referenceMidpoints[x]).split(',')[1]
 			//console.log(c.y + ',' + c.x + ' - ' + la + ',' + lo)
 			X.push(getDistanceFromLatLon(c.y,c.x,la,lo))
 		}
@@ -526,31 +535,32 @@ function determineColorThroughML(f){
 		else{
 			console.log('x (' + x + ') not anywhere')
 		}
-	}
-	for (var i in referefenceMidpoints){
-		
-	}
-	//Normalizing
-	var normalizedX = []
-	for (var i in X) {
-		normalizedX.push((X[i] - scaler.mean[i]) / scaler.scale[i]) //(normVals.max[i] - normVals.min[i])
+		if (isNaN(X[X.length-1])) {
+			console.log(x + " is nan. That's not good...")
+		}
+		allShownFeaturesData[f.FID][x] = X[X.length-1]
 	}
 
-	tf_x = tf.tensor(normalizedX)
-	tf_x = tf_x.reshape([1, normalizedX.length])
+	//Normalizing
+	var normX = []
+	for (var i in X) {
+		normX.push((X[i] - scaler.mean[i]) / scaler.scale[i]) //(normVals.max[i] - normVals.min[i])
+	}
+
+	tf_x = tf.tensor(normX)
+	tf_x = tf_x.reshape([1, normX.length])
 	
 	const pred = Array.from(model.predict(tf_x).dataSync())
 	for (var i in targetColumns){
-		f.properties[targetColumns[i]] = pred[i]
+		f[targetColumns[i]] = pred[i]
 	}
-
-	props = f.properties
 
 	randBlur = (1 - Math.random() * 2) * 0.1
 
-	if (props.FreeSpot + randBlur >= .8){
+
+	if (f.FreeSpot + randBlur >= .8){
 		return colors.green99
-	} else if (props.FreeSpot + randBlur >= .2){
+	} else if (f.FreeSpot + randBlur >= .2){
 		return colors.yellow100
 	} else {
 		return colors.red99
@@ -560,7 +570,7 @@ function determineColorThroughML(f){
 function loadParkingLines() {
 	if (!checkZoomAndUserLocAndHeavyDataLoaded()){
 		setTimeout(function(){ //Don't know why, but this code runs before code right before it, when there is any there.
-			parkeringar = L.geoJson(globalValues, {
+			parkeringar = L.geoJson(geojson, {
 				filter: function(feature, layer) {
 					return withinViewAndNotInMap(feature)
 				},
@@ -574,10 +584,10 @@ function loadParkingLines() {
 					}
 				}
 			}).addTo(map)
-			clickArea = L.geoJson(globalValues, {
+			clickArea = L.geoJson(geojson, {
 				onEachFeature: onEachFeature,
 				filter: function(feature, layer) {
-					return shownFIDs.indexOf(feature.properties.FID) > -1
+					return shownFIDs.indexOf(feature.FID) > -1
 				},
 				style: function(params) {
 					return {
@@ -594,9 +604,6 @@ function loadParkingLines() {
 				updateInfoBox('')
 			}
 		}, 10);
-		//$('#info-box').removeClass('invisible')
-		//$('#info-box').html('<strong>Loading parking data...</strong>')
-		//$('#info-box').addClass('invisible')
 	}
 }
 
@@ -626,8 +633,8 @@ var dataFromSheets = new Promise(function(resolve, reject) {
 	}, 'json');
 });
 
-var promiseOfGeojsonData = new Promise(function(resolve, reject) {
-	$.getJSON("../data/allaParkeringarSthlmStad.geojson", function(data) {
+var geojson = new Promise(function(resolve, reject) {
+	$.getJSON("../data/allaParkeringar.geojson", function(data) {
 		resolve(data)
 	});
 });
@@ -643,37 +650,27 @@ var otherRelevantData = new Promise(function(resolve, reject) {
 	});
 });
 
-var normalizedDatabase = new Promise(function(resolve, reject) {
-	$.get("../data/normalized_database.csv", function(data) {
+var fixedXData = new Promise(function(resolve, reject) {
+	$.get("../data/fixedXData.csv", function(data) {
 		resolve(CSVToArray(data))
 	});
 });
 
-var parkingWithOsmData = new Promise(function(resolve, reject) {
-	$.get("../data/parking_with_osm_data.csv", function(data) {
-		resolve(CSVToArray(data))
-	});
-});
-
-Promise.all([dataFromSheets,promiseOfGeojsonData,model,otherRelevantData,normalizedDatabase,parkingWithOsmData/*referefenceMidpoints,scaler,superflousAttributes,categoryColumns,targetColumns*/]).then(function(values) {
+Promise.all([dataFromSheets, geojson, model, otherRelevantData, fixedXData]).then(function(values) {
 	dataFromSheets = values[0]
-	globalValues = values[1]
+	geojson = values[1]
 	model = values[2]
-	referefenceMidpoints = values[3]['reference_midpoints']
+	referenceMidpoints = values[3]['reference_midpoints']
 	scaler = values[3]['scaler']
-	categoryColumns = values[3]['cat_cols']
 	targetColumns = values[3]['target_columns']
-	normalizedDatabase = values[4]
-	parkingWithOsmData = values[5]
+	fixedXData = values[4]
 	console.log(dataFromSheets)
-	console.log(globalValues)
+	console.log(geojson)
 	console.log(model)
-	console.log(referefenceMidpoints)
+	console.log(referenceMidpoints)
 	console.log(scaler)
-	console.log(categoryColumns)
 	console.log(targetColumns)
-	console.log(normalizedDatabase)
-	console.log(parkingWithOsmData)
+	console.log(fixedXData)
 	heavyDataLoaded = true
 
 	loadParkingLines()
