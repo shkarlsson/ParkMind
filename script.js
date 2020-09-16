@@ -115,16 +115,21 @@ var map = L.map('map', {
 	center: [59.3274541, 18.0543566],
 	zoom: 11,
 	layers: [baseMaps['MapBox Light']],
-	zoomControl: false,
+	zoomControl: false
 })
+
+L.control.layers(baseMaps, null, {
+	//position: 'topleft'
+}).addTo(map)
+
 
 var goToPositionButton = L.Control.extend({
 	options: {
-		position: 'topright'
+		//position: 'topright'
 	},
 	onAdd: function(map) {
 		//<button id="add-button" type="button" class="btn btn-secondary btn-sm"><span class="fa fa-location-arrow"></span></button>
-		var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom btn btn-secondary btn-sm');
+		var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom btn btn-light btn-sm');
 		container.appendChild(L.DomUtil.create('span', 'fa fa-location-arrow'))
 		container.onclick = function() {
 			map.panTo(currentLocation.dot._latlng)
@@ -133,7 +138,24 @@ var goToPositionButton = L.Control.extend({
 	}
 });
 
+var infoButton = L.Control.extend({
+	options: {
+		position: 'topleft'
+	},
+	onAdd: function(map) {
+		//<button id="add-button" type="button" class="btn btn-secondary btn-sm"><span class="fa fa-location-arrow"></span></button>
+		var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom btn btn-light btn-sm');
+		container.appendChild(L.DomUtil.create('span', 'fa fa-info-circle'))
+		container.onclick = function(e) {
+			console.log(e)
+			updateInfoBox('This thing shows the probability of parking being available based on a ML model taught by previous observations of a few locations. So far, the accuracy is about 70 %. Made by <a href="mailto:sven.henrik.karlsson@gmail.com">Henrik Karlsson</a>.')
+		}
+		return container;
+	}
+});
+
 map.addControl(new goToPositionButton());
+map.addControl(new infoButton());
 
 function disableSubmitFields() {
 	$('.form-control').attr('disabled', true)
@@ -245,11 +267,6 @@ var colors = {
 	'white100': '#ffffff',
 	'black100': '#000000',
 }
-
-//Add layers to top right menu
-L.control.layers(baseMaps, null, {
-	position: 'topleft'
-}).addTo(map)
 
 function clearActiveSelectedParking() {
 	if (aktivParkering) {
