@@ -72,6 +72,10 @@ function getDistanceFromLatLon(lat1, lon1, lat2, lon2) {
 }
 
 const baseMaps = {
+	"MapBox Light": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVycmthcmxzb24iLCJhIjoiY2p1MW9td3ZpMDNrazQ0cGVmMDltc3EwaSJ9.0h6iBb8t7laIu-xP7YE4CQ', {
+	tileSize: 512,
+	zoomOffset: -1,
+	}),
 	"Google Satellite": L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
 		maxZoom: 20,
 		subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
@@ -79,6 +83,14 @@ const baseMaps = {
 	"ArcGIS Satellite": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 		attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
 		opacity: .8
+	})/*,
+	"MapBox Normal": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVycmthcmxzb24iLCJhIjoiY2p1MW9td3ZpMDNrazQ0cGVmMDltc3EwaSJ9.0h6iBb8t7laIu-xP7YE4CQ', {
+		tileSize: 512,
+		zoomOffset: -1,
+	}),
+	"MapBox Dark": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVycmthcmxzb24iLCJhIjoiY2p1MW9td3ZpMDNrazQ0cGVmMDltc3EwaSJ9.0h6iBb8t7laIu-xP7YE4CQ', {
+		tileSize: 512,
+		zoomOffset: -1,
 	}),
 	"Google Streets": L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
 		maxZoom: 20,
@@ -96,22 +108,13 @@ const baseMaps = {
 	'OpenStreetMap Color': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		maxZoom: 19,
 		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-	}),
-	"MapBox Light": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVycmthcmxzb24iLCJhIjoiY2p1MW9td3ZpMDNrazQ0cGVmMDltc3EwaSJ9.0h6iBb8t7laIu-xP7YE4CQ', {
-	tileSize: 512,
-	zoomOffset: -1,
-	}),
-	"MapBox Normal": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVycmthcmxzb24iLCJhIjoiY2p1MW9td3ZpMDNrazQ0cGVmMDltc3EwaSJ9.0h6iBb8t7laIu-xP7YE4CQ', {
-		tileSize: 512,
-		zoomOffset: -1,
-	}),
-	"MapBox Dark": L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVycmthcmxzb24iLCJhIjoiY2p1MW9td3ZpMDNrazQ0cGVmMDltc3EwaSJ9.0h6iBb8t7laIu-xP7YE4CQ'),
+	}),*/
 }
 
 var map = L.map('map', {
 	center: [59.3274541, 18.0543566],
 	zoom: 11,
-	layers: [baseMaps['OpenStreetMap B&W']],
+	layers: [baseMaps['MapBox Light']],
 	zoomControl: false,
 })
 
@@ -245,6 +248,7 @@ var colors = {
 
 //Add layers to top right menu
 L.control.layers(baseMaps, null, {
+	position: 'topleft'
 }).addTo(map)
 
 function clearActiveSelectedParking() {
