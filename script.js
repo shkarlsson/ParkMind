@@ -569,14 +569,19 @@ function determineColorThroughML(f){
 	}
 
 	tf_x = tf.tensor(normX)
+	//tf.dtypes.DType(tf_x).print()
 	tf_x = tf_x.reshape([1, normX.length])
+	//tf_x = tf_x.as_dtype(tf.float64)
+  
+
+	//console.log(tf.dtypes.DType(tf_x))
 	
 	const pred = Array.from(model.predict(tf_x).dataSync())
 	for (var i in targetColumns){
 		f[targetColumns[i]] = pred[i]
 	}
 
-	randBlur = (1 - Math.random() * 2) * 0.1
+	randBlur = (1 - Math.random() * 2) * 0//.1
 
 
 	if (f.FreeSpot + randBlur >= .8){
