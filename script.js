@@ -54,8 +54,7 @@ if (document.cookie.indexOf('uuid=') == -1) {
 var uuid = document.cookie.split('=')[1]
 
 
-
-var clickArea, parkeringar, aktivParkering, referenceMidpoints, scaler
+var clickArea, aktivParkering, referenceMidpoints, scaler
 var shownFIDs = []
 var currentLocation = {}
 var minZoomToLoadFeatures = 16
@@ -122,6 +121,7 @@ L.control.layers(baseMaps, null, {
 	//position: 'topleft'
 }).addTo(map)
 
+var parkeringar = L.layerGroup([]).addTo(map); 
 
 var goToPositionButton = L.Control.extend({
 	options: {
@@ -148,7 +148,7 @@ var infoButton = L.Control.extend({
 		container.appendChild(L.DomUtil.create('span', 'fa fa-info-circle'))
 		container.onclick = function(e) {
 			console.log(e)
-			updateInfoBox('This thing shows the probability of parking being available based on a ML model taught by previous observations of a few locations. So far, the accuracy is about 70 %. Made by <a href="mailto:sven.henrik.karlsson@gmail.com">Henrik Karlsson</a>.')
+			updateInfoBox('This thing shows the probability of parking being available based on a ML model taught by previous observations of a few locations. So far, the accuracy is about ' + Math.round(modelPertformance.binary_accuracy * 100) + ' %. Made by <a href="mailto:sven.henrik.karlsson@gmail.com">Henrik Karlsson</a>.')
 		}
 		return container;
 	}
@@ -159,7 +159,7 @@ map.addControl(new infoButton());
 
 function disableSubmitFields() {
 	$('.form-control').attr('disabled', true)
-	$('#submit-button').attr('disabled', true)
+	//$('#submit-button').attr('disabled', true) //Uncomment when using more detailed observation fields.
 	$('#gform').hide().css('height', '0px');
 	$('#legend').show().css('height', '');
 }
@@ -203,12 +203,11 @@ $(document).keyup(function(e) {
 		clearActiveSelectedParking()
 		clearFormFields()
 	}
-	if ($('[name="ParkedCars"]').val() + $('[name="FreeSpots"]').val() + $('[name="TotalSpots"]').val() + $('[name="IllegalParkings"]').val() + $('[name="Comments"]').val() == '') {
+	/*if ($('[name="ParkedCars"]').val() + $('[name="FreeSpots"]').val() + $('[name="TotalSpots"]').val() + $('[name="IllegalParkings"]').val() + $('[name="Comments"]').val() == '') {
 		$('#submit-button').attr('disabled', true)
 	} else {
 		$('#submit-button').attr('disabled', false)
-
-	}
+	}*/ //Uncomment when using detailed observation fields
 });
 
 function onLocationFound(e) {
@@ -306,9 +305,14 @@ function getLengthOfParkering(ap){
 	}
 	return Math.round(length)
 }
+const unusedObservationValues = ['ParkedCars', 'TotalSpots', 'FreeSpots','IllegalParkings', 'Comments']
 
-function jsSubmitForm(e) {
+function jsSubmitForm(e,fs) {
 	var es = $(e).serialize()
+	for (var i in unusedObservationValues){
+		es += '&' + unusedObservationValues[i] + '='
+	}
+	es += '&FreeSpot=' + fs
 	//navigator.geolocation.getCurrentPosition(function(position) {
 	if ('dot' in currentLocation){
 		es += '&SenderLocation=' + currentLocation.dot._latlng.lat + ',' + currentLocation.dot._latlng.lng
@@ -323,7 +327,24 @@ function jsSubmitForm(e) {
 		console.log(response)
 		$(e).append
 	}, 'json');
-	//recolorThisFeature(e.elements.FeatureId.value)
+
+	if (fs == 1){
+		newColor = colors.green99
+	} else if (fs == 0){
+		newColor = colors.red99
+	}
+	parkeringar.eachLayer(function (layer) {  
+		//console.log(layer)
+		//console.log(layer.pm._layerGroup._layers)
+		lgl = layer.pm._layerGroup._layers
+		for (var l in lgl){
+			if (lgl[l].feature.FID == e.elements.FeatureId.value){
+				lgl[l].setStyle({color: newColor})
+			}
+		}
+	});
+
+	
 	clearFormFields()
 	map.closePopup();
 	
@@ -438,15 +459,7 @@ function onEachFeature(feature, layer) {
 	});
 }
 
-function recolorThisFeature(fid) {
-	parkeringar.eachLayer(function(layer) {
-		if (layer.feature.FID == fid) {
-			layer.setStyle({
-				color: 'red'
-			})
-		}
-	})
-}
+
 
 function getGeojsonCenter(f){
 	let xMin = 10^10
@@ -569,14 +582,19 @@ function determineColorThroughML(f){
 	}
 
 	tf_x = tf.tensor(normX)
+	//tf.dtypes.DType(tf_x).print()
 	tf_x = tf_x.reshape([1, normX.length])
+	//tf_x = tf_x.as_dtype(tf.float64)
+  
+
+	//console.log(tf.dtypes.DType(tf_x))
 	
 	const pred = Array.from(model.predict(tf_x).dataSync())
 	for (var i in targetColumns){
 		f[targetColumns[i]] = pred[i]
 	}
 
-	randBlur = (1 - Math.random() * 2) * 0.1
+	randBlur = (1 - Math.random() * 2) * 0//.1
 
 
 	if (f.FreeSpot + randBlur >= .8){
@@ -591,7 +609,7 @@ function determineColorThroughML(f){
 function loadParkingLines() {
 	if (!checkZoomAndUserLocAndHeavyDataLoaded()){
 		setTimeout(function(){ //Don't know why, but this code runs before code right before it, when there is any there.
-			parkeringar = L.geoJson(geojson, {
+			parkeringar.addLayer(L.geoJson(geojson, {
 				filter: function(feature, layer) {
 					return withinViewAndNotInMap(feature)
 				},
@@ -604,7 +622,7 @@ function loadParkingLines() {
 						smoothFactor: 3
 					}
 				}
-			}).addTo(map)
+			}))
 			clickArea = L.geoJson(geojson, {
 				onEachFeature: onEachFeature,
 				filter: function(feature, layer) {
@@ -684,6 +702,7 @@ Promise.all([dataFromSheets, geojson, model, otherRelevantData, fixedXData]).the
 	referenceMidpoints = values[3]['reference_midpoints']
 	scaler = values[3]['scaler']
 	targetColumns = values[3]['target_columns']
+	modelPertformance = values[3]['model_performance']
 	fixedXData = values[4]
 	console.log(dataFromSheets)
 	console.log(geojson)
@@ -691,6 +710,7 @@ Promise.all([dataFromSheets, geojson, model, otherRelevantData, fixedXData]).the
 	console.log(referenceMidpoints)
 	console.log(scaler)
 	console.log(targetColumns)
+	console.log(modelPertformance)
 	console.log(fixedXData)
 	heavyDataLoaded = true
 
