@@ -54,7 +54,7 @@ if (document.cookie.indexOf('uuid=') == -1) {
 var uuid = document.cookie.split('=')[1]
 
 
-var clickArea, aktivParkering, referenceMidpoints, scaler
+var clickArea, activeParking, referenceMidpoints, scaler
 var shownFIDs = []
 var currentLocation = {}
 var minZoomToLoadFeatures = 16
@@ -268,13 +268,13 @@ var colors = {
 }
 
 function clearActiveSelectedParking() {
-	if (aktivParkering) {
-		map.removeLayer(aktivParkering)
+	if (activeParking) {
+		map.removeLayer(activeParking)
 	}
 	$('[name="FeatureId"]').val('')
 	disableSubmitFields()
-		//$('.form-control').attr('disabled', false)
-		//$('#gform').addClass('invisible')
+	//$('.form-control').attr('disabled', false)
+	//$('#gform').addClass('invisible')
 }
 
 function clearFormFields() {
@@ -285,7 +285,7 @@ function clearFormFields() {
 	$('[name="Comments"]').val('')
 }
 
-function getLengthOfParkering(ap){
+function getLengthOfParking(ap){
 	var length = 0
 	if ('_leaflet_id' in ap){ //This means a leaflet layer is being used.
 		var coords = ap._layers[Object.keys(ap._layers)[0]]._latlngs;
@@ -313,17 +313,15 @@ function jsSubmitForm(e,fs) {
 		es += '&' + unusedObservationValues[i] + '='
 	}
 	es += '&FreeSpot=' + fs
-	//navigator.geolocation.getCurrentPosition(function(position) {
 	if ('dot' in currentLocation){
 		es += '&SenderLocation=' + currentLocation.dot._latlng.lat + ',' + currentLocation.dot._latlng.lng
 	}
-	es += '&FeatureMidpoint=' + aktivParkering.getBounds().getCenter().lat + ',' + aktivParkering.getBounds().getCenter().lng
-	es += '&FeatureLength=' + getLengthOfParkering(aktivParkering)
+	es += '&FeatureMidpoint=' + activeParking.getBounds().getCenter().lat + ',' + activeParking.getBounds().getCenter().lng
+	es += '&FeatureLength=' + getLengthOfParking(activeParking)
 	es += '&uuid=' + uuid
 	console.log('The variable "es" to be json-ified and submitted is a ' + typeof es + ' and has the following value:')
 	console.log(es)
 	$.post($(e).attr('js_action'), es, function(response) {
-		// do something here on success
 		console.log(response)
 		$(e).append
 	}, 'json');
@@ -334,8 +332,6 @@ function jsSubmitForm(e,fs) {
 		newColor = colors.red99
 	}
 	parkeringar.eachLayer(function (layer) {  
-		//console.log(layer)
-		//console.log(layer.pm._layerGroup._layers)
 		lgl = layer.pm._layerGroup._layers
 		for (var l in lgl){
 			if (lgl[l].feature.FID == e.elements.FeatureId.value){
@@ -348,15 +344,13 @@ function jsSubmitForm(e,fs) {
 	clearFormFields()
 	map.closePopup();
 	
-	//})
 	clearActiveSelectedParking()
 	return false;
 }
 
 map.on({
 	click: function(e) {
-		if (e.originalEvent.target.id == 'map') { //Grejen efter && gör så att detta endast händer när man klickar på baskartan, inte på en feature.
-			//console.log(e.originalEvent.target.id)
+		if (e.originalEvent.target.id == 'map') { 
 			clearActiveSelectedParking()
 		}
 	}
@@ -381,7 +375,6 @@ function containsObject(obj, list) {
 }
 
 function withinViewAndNotInMap(feature) {
-	//console.log(Math.random())
 	y_marg = 0.002 // ≈59.321295 - 59.320403 * 2
 	x_marg = 0.006 // ≈17.991302 - 17.988620 * 2
 	var n = map.getBounds()._northEast.lat + y_marg
@@ -397,7 +390,6 @@ function withinViewAndNotInMap(feature) {
 	i = feature.FID
 	if (((ew1 < e && ns1 < n && ew1 > w && ns1 > s) || (ew2 < e && ns2 < n && ew2 > w && ns2 > s)) && shownFIDs.indexOf(i) == -1) {
 		shownFIDs.push(i)
-		//console.log("Adding another feature to the map...")
 		return true
 	}
 	return false
@@ -423,7 +415,6 @@ function checkZoomAndUserLocAndHeavyDataLoaded() {
 			updateInfoBox('')
 			return false
 		}
-		//$('#info-box').addClass('invisible')
 	}
 }
 
@@ -434,17 +425,16 @@ map.on('moveend', function() {
 function onEachFeature(feature, layer) {
 	layer.on({
 		click: function(e) {
-			if (aktivParkering) {
+			if (activeParking) {
 				clearActiveSelectedParking()
 			}
 			$('[name="FeatureId"]').val(feature.FID)
 			$('.form-control').attr('disabled', false)
 			$('#gform').show().css('height', '');
 			$('#legend').hide().css('height', '0px');
-			console.log(allShownFeaturesData[feature.FID])
+			//console.log(allShownFeaturesData[feature.FID])
 
-			aktivParkering = L.geoJson(e.sourceTarget.feature, {
-				//onEachFeature: onEachFeature,
+			activeParking = L.geoJson(e.sourceTarget.feature, {
 				style: function(params) {
 					return {
 						weight: 18,
@@ -454,14 +444,14 @@ function onEachFeature(feature, layer) {
 					}
 				}
 			}).addTo(map).bringToBack()
-			map.panTo(aktivParkering.getBounds().getCenter())
+			map.panTo(activeParking.getBounds().getCenter())
 		}
 	});
 }
 
 
-
 function getGeojsonCenter(f){
+	//Gets the center of a feature so that the viewport can pan (and zoom) there.
 	let xMin = 10^10
 	let yMin = 10^10
 	let xMax = -10^10
@@ -481,16 +471,15 @@ function getGeojsonCenter(f){
 			yMin = cc[1]
 		}
 	}
-	return {'x':(xMax+xMin),'y':(yMax+yMin)} //For some really weird reason, I shouldn't divide with 2 to get the average between min an max. I don't understand how, but this works.
+	return {'x': (xMax+xMin),'y': (yMax+yMin)} //For some really weird reason, I shouldn't divide with 2 to get the average between min an max. I don't understand how, but this works. ¯\_(ツ)_/¯
 }
 
-function getWkDayStartingWithMonday(dt){
+function getWkDayNumber(dt){
+	//Getting current week day as a number (0-6) for use as a feature in the neural net.
 	w = dt.getDay()
-	if (w == 0) {
-		w = 6
-	}
-	else {
-		w -= 1
+	w -= 1
+	if (w == -1){
+		return 6
 	}
 	return w
 }
@@ -499,20 +488,21 @@ var allShownFeaturesData = {}
 function determineColorThroughML(f){
 	let X = []
 	var la, lo
-	//console.log(f.FID)
-	//Below used for quickly (only once) finding the right row for osm data tied to parking locations. It's split up because the geojson file got too large when the info was contained there.
+	//Below is used for quickly (only once) finding the right row for osm data tied to parking locations. It's split up because the geojson file got too large when the info was contained there.
 
-	//Finding the right row to get data from...
+	//Finding the right row to get data from.
 	for (rowNo in fixedXData){
 		if (f.FID == fixedXData[rowNo][0]){
 			break
 		}
 	}
 
+	
+	//Colleting values for (x) array to predict on.
 	let dt = new Date()
 	let t = (((dt.getSeconds() / 60 + dt.getMinutes()) / 60) + dt.getHours()) / 24
 	let d = ((t + dt.getDate()) / 31 + dt.getMonth()) / 12
-	let w = (t + getWkDayStartingWithMonday(dt)) / 7
+	let w = (t + getWkDayNumber(dt)) / 7
 
 	timeFeatures = {
 		timestamp: Date.now()/1000,
@@ -529,18 +519,18 @@ function determineColorThroughML(f){
 	for (var i in scaler['name']){
 		x = scaler['name'][i]
 		if (x == 'FeatureLength') { //I need to do this because I can't send many leghts to google sheets.
-			X.push(getLengthOfParkering(f))
+			X.push(getLengthOfParking(f))
 		}
 		else if (x == 'ObservationsByUser'){
-			X.push(100) //Något högt tal så att den ger resultat från användare som ger många observationer.
+			X.push(100) //Some high number is provided so that it generates results that would be coming form users who submit many observations.
 		}
 		else if (x == 'ObservationsOfParking'){
-			X.push(20) //Något högt tal så att den ger resultat från användare som ger många observationer.
+			X.push(20) //Some high number is provided so that it generates results that would be coming form users who submit many observations.
 		}
 		else if (x in dataFromSheets){
 			X.push(dataFromSheets[x])
 		}
-		else if (fixedXData[0].indexOf(x) > -1){ //Don't know why, but this works, not "x i parkeringWith...".
+		else if (fixedXData[0].indexOf(x) > -1){ //Don't know why, but this works, not "x in parkeringWith...".
 			colNo = fixedXData[0].indexOf(x)
 			xVal = parseInt(fixedXData[rowNo][colNo])
  			X.push(xVal)
@@ -551,20 +541,16 @@ function determineColorThroughML(f){
 		else if (x in referenceMidpoints){
 			la = String(referenceMidpoints[x]).split(',')[0]
 			lo = String(referenceMidpoints[x]).split(',')[1]
-			//console.log(c.y + ',' + c.x + ' - ' + la + ',' + lo)
 			X.push(getDistanceFromLatLon(c.y,c.x,la,lo))
 		}
 		else if (x.substr(0, 4) == 'cat_') { //Making one-hots
 			var cat = x.substr(4, x.lastIndexOf('_') - 4)
 			var catVal = x.substr(x.lastIndexOf('_') + 1)
-			//console.log('Checking if dataFromSheets[' + cat + '] (' + dataFromSheets[cat] + ') == ' + catVal)
 			if (dataFromSheets[cat] == catVal) {
-				//console.log('it was')
 				X.push(1)
 			} else {
 				X.push(0)
 			}
-			//delete dataFromSheets[cat]
 		}
 		else{
 			console.log('x (' + x + ') not anywhere')
@@ -575,7 +561,7 @@ function determineColorThroughML(f){
 		allShownFeaturesData[f.FID][x] = X[X.length-1]
 	}
 
-	//Normalizing
+	//Normalizing array
 	var normX = []
 	for (var i in X) {
 		normX.push((X[i] - scaler.mean[i]) / scaler.scale[i]) //(normVals.max[i] - normVals.min[i])
@@ -585,10 +571,7 @@ function determineColorThroughML(f){
 	//tf.dtypes.DType(tf_x).print()
 	tf_x = tf_x.reshape([1, normX.length])
 	//tf_x = tf_x.as_dtype(tf.float64)
-  
-
-	//console.log(tf.dtypes.DType(tf_x))
-	
+  	
 	const pred = Array.from(model.predict(tf_x).dataSync())
 	for (var i in targetColumns){
 		f[targetColumns[i]] = pred[i]
@@ -608,7 +591,7 @@ function determineColorThroughML(f){
 
 function loadParkingLines() {
 	if (!checkZoomAndUserLocAndHeavyDataLoaded()){
-		setTimeout(function(){ //Don't know why, but this code runs before code right before it, when there is any there.
+		setTimeout(function(){ //Don't know why, but this code runs before code right before it. Adding this 10 ms delay fixes that.
 			parkeringar.addLayer(L.geoJson(geojson, {
 				filter: function(feature, layer) {
 					return withinViewAndNotInMap(feature)
@@ -646,7 +629,7 @@ function loadParkingLines() {
 	}
 }
 
-var serial = 'FeatureId=30228714&SenderLocation=59.32041214046096,17.988411617590103&FeatureMidpoint=59.3202055,17.987212&FeatureLength=39' //Has no bearing. It's just used to get data from the server.
+var serial = 'FeatureId=30228714&SenderLocation=59.32041214046096,17.988411617590103&FeatureMidpoint=59.3202055,17.987212&FeatureLength=39' //These values have no bearing. The server just requires some data to provide a response.
 var dataFromSheets = new Promise(function(resolve, reject) {
 	$.get($("#gform").attr('js_action'), serial, function(response) {
 		//console.log(response)
@@ -742,9 +725,9 @@ Promise.all([dataFromSheets, geojson, model, otherRelevantData, fixedXData]).the
 	//disableSubmitFields()
 });
 
-//Fixa så att den setView:ar när den får GPS-data igen.
-//Lägg in analytics
-//Fixa totaler i legend
-//Föreslå ny plats-funktion
 
+//TODO:
+//Make it so that it sets view when it receives GPS location again.
+//Add totals in the legend
+//Function for users to add parking
 
