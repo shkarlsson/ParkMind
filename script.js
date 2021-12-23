@@ -637,6 +637,7 @@ var dataFromSheets = new Promise(function(resolve, reject) {
 		console.log(data)
 		var resolver = {}
 		for (var i in data['field']) {
+			console.log(i)
 			if (Array.isArray(data['row'][i])) {
 				data['row'][i] = data['row'][i][0]
 			}
