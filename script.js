@@ -1,5 +1,3 @@
-var e = {'parameters':{}}
-
 var today = new Date();
 var helgdataToKeep = {}
 var daysBeforeToKeep = 6
