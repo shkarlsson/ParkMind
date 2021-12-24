@@ -1,3 +1,43 @@
+var e = {'parameters':{}}
+
+var today = new Date();
+var helgdataToKeep = {}
+var daysBeforeToKeep = 6
+var daysAfterToKeep = 7 //Including current day
+
+function addDays(date, days) {
+	var result = new Date(date);
+	result.setDate(result.getDate() + days);
+	return result;
+  }
+
+function isObject(thing){
+	return (typeof thing === 'object' && !Array.isArray(thing) && thing !== null)
+}
+function isRedDay(date){
+	return + date.getDay() == 0 || isObject(isHoliday(date))
+}
+
+function isWorkFreeDay(date){
+	return + (isRedDay(date) || date.getDay() == 6)
+}
+
+const weekDayMap = ['Söndag','Måndag','Tisdag','Onsdag','Torsdag','Fredag','Lördag']
+
+for (var m = -daysBeforeToKeep; m < daysAfterToKeep; m++) {
+	thisDate = addDays(today,m)
+	console.log(thisDate)
+	helgdataToKeep['redDay' + m] = isRedDay(thisDate)
+	helgdataToKeep['workFreeDay' + m] = isWorkFreeDay(thisDate)
+	if (m == 0) {
+	  helgdataToKeep['weekday'] = weekDayMap[thisDate.getDay()]
+	} 
+	if(today.getDay() == 6 || today.getDay() == 0) alert('Weekend!');
+	
+}
+
+helgdataToKeep = JSON.stringify(helgdataToKeep)
+
 var isIE = /*@cc_on!@*/ false || !!document.documentMode;
 
 if (isIE) {
@@ -630,13 +670,16 @@ function loadParkingLines() {
 }
 
 var serial = 'FeatureId=30228714&SenderLocation=59.32041214046096,17.988411617590103&FeatureMidpoint=59.3202055,17.987212&FeatureLength=39' //These values have no bearing. The server just requires some data to provide a response.
+serial += '&helgdatatokeep=' + helgdataToKeep
+console.log(serial)
 var dataFromSheets = new Promise(function(resolve, reject) {
 	$.get($("#gform").attr('js_action'), serial, function(response) {
-		//console.log(response)
+		console.log(response)
 		var data = JSON.parse(response)
 		console.log(data)
 		var resolver = {}
 		for (var i in data['field']) {
+			console.log(i)
 			if (Array.isArray(data['row'][i])) {
 				data['row'][i] = data['row'][i][0]
 			}
